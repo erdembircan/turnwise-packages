@@ -6,20 +6,11 @@ import { facesFromCube } from './grid';
 import type { FaceGrid } from './grid';
 import { Moves } from './move';
 import type { Move } from './move';
+import { randomMoves } from './testing/grids';
 import { readOracle, solvedOracle, turnOracle } from './testing/oracle';
-import { seededRandom } from './testing/rng';
-import { at } from './util';
 
 const MOVE_POOL: readonly Move[] = Object.values(Moves);
 const ALL_FACES: readonly Face[] = Object.values(Faces);
-
-function randomMoves(rng: () => number, length: number): Move[] {
-  const moves: Move[] = [];
-  for (let i = 0; i < length; i++) {
-    moves.push(at(MOVE_POOL, Math.floor(rng() * MOVE_POOL.length)));
-  }
-  return moves;
-}
 
 function expectGridMatchesOracle(
   grid: FaceGrid,
@@ -57,9 +48,7 @@ describe('facesFromCube', () => {
 
   it('matches the oracle for 300 seeded random sequences', () => {
     for (let seed = 1; seed <= 300; seed++) {
-      const rng = seededRandom(seed);
-      const length = 1 + Math.floor(rng() * 40);
-      const sequence = randomMoves(rng, length);
+      const sequence = randomMoves(seed);
       const grid = facesFromCube(cubeFromMoves(sequence));
       const oracleGrid = readOracle(turnOracle(solvedOracle(), sequence));
       expectGridMatchesOracle(grid, oracleGrid, `seed ${String(seed)}`);

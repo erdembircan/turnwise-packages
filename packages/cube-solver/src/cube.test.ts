@@ -4,6 +4,7 @@ import type { Cube } from './cube';
 import { facesFromCube } from './grid';
 import { Moves, inverse } from './move';
 import type { Move } from './move';
+import { randomMoves } from './testing/grids';
 import { seededRandom } from './testing/rng';
 import { at } from './util';
 
@@ -15,7 +16,10 @@ function asRuntimeString(value: string): string {
   return value;
 }
 
-function randomMoves(rng: () => number, length: number): Move[] {
+// Draws `length` moves from an already-created rng, so two sequences can be drawn back to back
+// from the same continuing stream. `randomMoves` (from testing/grids) always starts a fresh rng
+// from a seed, which does not fit that.
+function movesFrom(rng: () => number, length: number): Move[] {
   const moves: Move[] = [];
   for (let i = 0; i < length; i++) {
     moves.push(at(MOVE_POOL, Math.floor(rng() * MOVE_POOL.length)));
@@ -83,9 +87,7 @@ describe('applyMoves', () => {
 
   it('undoes a random sequence with its inverse, for 200 seeded sequences', () => {
     for (let seed = 1; seed <= 200; seed++) {
-      const rng = seededRandom(seed);
-      const length = 1 + Math.floor(rng() * 40);
-      const sequence = randomMoves(rng, length);
+      const sequence = randomMoves(seed);
       const cube = applyMoves(cubeFromMoves(sequence), inverse(sequence));
       expect(isSolved(cube), `seed ${String(seed)}`).toBe(true);
     }
@@ -94,8 +96,8 @@ describe('applyMoves', () => {
   it('agrees with cubeFromMoves on the concatenation, for 50 seeded pairs', () => {
     for (let seed = 1; seed <= 50; seed++) {
       const rng = seededRandom(seed);
-      const a = randomMoves(rng, 1 + Math.floor(rng() * 20));
-      const b = randomMoves(rng, 1 + Math.floor(rng() * 20));
+      const a = movesFrom(rng, 1 + Math.floor(rng() * 20));
+      const b = movesFrom(rng, 1 + Math.floor(rng() * 20));
       const combined = cubeFromMoves([...a, ...b]);
       const applied = applyMoves(cubeFromMoves(a), b);
       expect(facesFromCube(applied), `seed ${String(seed)}`).toEqual(facesFromCube(combined));
