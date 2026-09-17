@@ -60,11 +60,3 @@ try {
 // Speed, and where to run it
 prepare();
 export const quick: Move[] = solve(cube, { effort: 'fast' });
-
-addEventListener('message', (event: MessageEvent<FaceGrid>) => {
-  postMessage(solve(cubeFromFaces(event.data)));
-});
-
-const worker = new Worker(new URL('./solver.worker.ts', import.meta.url), { type: 'module' });
-cubeFromFaces(faces);
-worker.postMessage(faces);
