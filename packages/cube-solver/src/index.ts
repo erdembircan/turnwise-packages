@@ -5,6 +5,7 @@ export {
   CornerTwistError,
   DuplicatePieceError,
   EdgeFlipError,
+  FaceletStringError,
   InvalidCubeError,
   ParityError,
   StickerCountError,
@@ -13,6 +14,7 @@ export {
 export type { ObservedPiece } from './errors';
 export { Faces } from './face';
 export type { Face } from './face';
+export { parseFaceletString } from './faceletString';
 export type { StickerLocation } from './facelets';
 export { cubeFromFaces } from './fromFaces';
 export { facesFromCube } from './grid';
