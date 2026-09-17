@@ -12,7 +12,7 @@ if (dotignoreStrict === undefined) {
 }
 
 export default defineConfig(
-  { ignores: ['**/dist/', '**/coverage/', '**/node_modules/', '.claude/'] },
+  { ignores: ['**/dist/', '**/coverage/', '**/node_modules/', '.claude/', 'e2e/'] },
   {
     files: codeFiles,
     extends: [

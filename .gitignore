@@ -8,4 +8,5 @@ packages/*/LICENSE
 .claude/
 coverage/
 dist/
+e2e/.pack/
 node_modules/

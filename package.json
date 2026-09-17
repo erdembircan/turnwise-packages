@@ -18,6 +18,7 @@
     "license:verify": "license-wizard --verify --strict",
     "check:package": "pnpm -r check:package",
     "check": "pnpm typecheck && pnpm lint && pnpm test && pnpm build && pnpm check:package && pnpm license:verify",
+    "e2e": "pnpm build && pnpm --filter @turnwise/cube-solver pack --out \"$PWD/e2e/.pack/cube-solver.tgz\" && cd e2e/consumer && pnpm install --ignore-workspace && pnpm exec tsc -p tsconfig.json && pnpm exec tsc -p tsconfig.nodenext.json && node run.mjs && node require.cjs",
     "changeset": "changeset",
     "version-packages": "changeset version",
     "release": "pnpm check && changeset publish"
