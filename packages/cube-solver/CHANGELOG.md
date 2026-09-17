@@ -18,3 +18,4 @@ and this package adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `inverse`, `faceOf`, `turnsOf`, `formatAlgorithm`: work with moves, and print them in traditional notation.
 - `Face` and `Move` as string literal types, with `Faces` and `Moves` as lookup objects for the same values.
 - Named errors for cubes that cannot exist: `StickerCountError`, `UnknownPieceError`, `DuplicatePieceError`, `CornerTwistError`, `EdgeFlipError` and `ParityError`, all extending `InvalidCubeError`, plus `FaceletStringError`. Each message says what is wrong, where, and what to check.
+- Full documentation in `docs/documentation.md`, shipped inside the package. Its examples are compiled against the published types.
