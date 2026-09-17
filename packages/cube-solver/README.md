@@ -137,7 +137,7 @@ Once you hold a `Cube`, it is legal. `solve` never rejects one and never fails t
 
 ## Speed, and where to run it
 
-| What | Time | Result |
+| | Time | Result |
 | --- | --- | --- |
 | Importing the package | nothing | no tables are built |
 | First `solve`, or `prepare()` | about 0.3 s, once | builds 6 MB of lookup tables |
