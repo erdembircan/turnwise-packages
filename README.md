@@ -20,6 +20,8 @@ pnpm check
 
 `pnpm check` runs everything CI runs: type checking, linting, tests, the build, and license verification. Each step is also available on its own as `pnpm typecheck`, `pnpm lint`, `pnpm test`, `pnpm build` and `pnpm license:verify`.
 
+`pnpm e2e` goes one step further: it packs the package exactly as npm would receive it, installs that tarball into a small project outside the workspace, compiles the README's examples against the published types, and runs the published code under plain Node.
+
 ## Releasing
 
 Versions and changelogs are managed with [Changesets](https://github.com/changesets/changesets).
