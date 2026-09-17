@@ -135,36 +135,13 @@ With the default effort, a cube that is only a few moves from solved comes back 
 
 Work is counted in positions examined, not in time, so the same cube and effort always give the same solution.
 
-`solve` is synchronous and keeps its thread busy. In a browser, run it in a worker, and call `prepare()` there first so the tables are ready before the first request:
+`solve` is synchronous and keeps its thread busy. In a browser, run it in a worker, and call `prepare()` there first so the tables are ready before the first request. Send the worker the `FaceGrid` or the moves, not the `Cube`: a `Cube` is deliberately opaque and does not survive `postMessage`. The [documentation](docs/documentation.md#performance-and-threading) has a complete worker, in a dozen lines.
 
-```ts
-// solver.worker.ts
-import { cubeFromFaces, prepare, solve } from '@turnwise/cube-solver';
-import type { FaceGrid } from '@turnwise/cube-solver';
+## Documentation
 
-prepare();
+**[docs/documentation.md](docs/documentation.md)** is the full reference: how to hold and read the cube, every export with its signature, what it throws and an example, every error with its fields and its exact message, and how to run the solver in a worker.
 
-addEventListener('message', (event: MessageEvent<FaceGrid>) => {
-  postMessage(solve(cubeFromFaces(event.data)));
-});
-```
-
-```ts
-// main thread
-import { cubeFromFaces } from '@turnwise/cube-solver';
-
-const worker = new Worker(new URL('./solver.worker.ts', import.meta.url), { type: 'module' });
-
-cubeFromFaces(faces); // wrong stickers throw here, where the user interface can respond
-worker.postMessage(faces);
-worker.addEventListener('message', (event) => {
-  console.log(event.data); // the solution
-});
-```
-
-Send the `FaceGrid` (or the moves) to the worker, not the `Cube`. A `Cube` is deliberately opaque and does not survive `postMessage` or `JSON.stringify`; `facesFromCube(cube)` turns one back into a grid. Checking the stickers twice costs microseconds.
-
-## Everything it exports
+It ships inside the package, at `node_modules/@turnwise/cube-solver/docs/documentation.md`, so it always matches the version you have installed, and a coding agent working in your project can read it without leaving the folder. Its examples are compiled against the published types on every change.
 
 | | |
 | --- | --- |
@@ -173,10 +150,9 @@ Send the `FaceGrid` (or the moves) to the worker, not the `Cube`. A `Cube` is de
 | Work with a cube | `applyMoves`, `isSolved`, `facesFromCube` |
 | Work with moves | `inverse`, `faceOf`, `turnsOf`, `formatAlgorithm` |
 | Values | `Faces`, `Moves` |
-| Types | `Cube`, `Face`, `Move`, `FaceGrid`, `FaceStickers`, `SolveOptions`, `ObservedPiece`, `StickerLocation`, `CornerPosition`, `EdgePosition` |
-| Errors | `InvalidCubeError`, `StickerCountError`, `UnknownPieceError`, `DuplicatePieceError`, `CornerTwistError`, `EdgeFlipError`, `ParityError`, `FaceletStringError` |
+| Errors | `InvalidCubeError` and six subclasses, `FaceletStringError` |
 
-Every export carries its documentation into your editor.
+Every export also carries its documentation into your editor.
 
 The package is ESM only. Node 22.12 and later can also load it with `require`.
 
