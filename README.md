@@ -24,13 +24,32 @@ pnpm check
 
 ## Releasing
 
-Versions and changelogs are managed with [Changesets](https://github.com/changesets/changesets).
+Releases are cut by hand, from a maintainer's machine. CI only verifies: no workflow publishes anything, and no npm credential is stored in GitHub. That is a deliberate choice, not a gap.
+
+Each package keeps a hand-written `CHANGELOG.md` in the [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) format. A pull request that changes a package adds a line under that changelog's `## [Unreleased]` heading, in the group it belongs to: Added, Changed, Deprecated, Removed, Fixed or Security.
+
+To cut a release of a package, you need to be logged in to npm (`npm login`) as a member of the `@turnwise` organisation. Then:
+
+1. In the package's `CHANGELOG.md`, rename `## [Unreleased]` to the new version and today's date, such as `## [1.0.0] - 2026-09-17`, and add a fresh, empty `## [Unreleased]` above it.
+2. Set the same version in the package's `package.json`. Choose it by [Semantic Versioning](https://semver.org/spec/v2.0.0.html): a breaking change is a major release, a new feature is a minor one, a fix is a patch.
+3. Commit both files.
+4. Publish from the package's folder. Every check runs first, and the publish stops if one fails:
 
 ```bash
-pnpm changeset
+pnpm publish
 ```
 
-Run that in any pull request that changes a package, and commit the file it writes. To cut a release, `pnpm version-packages` applies the pending changesets, and `pnpm release` runs every check and publishes.
+5. Tag the commit with the package name and version, then push the commit and the tag:
+
+```bash
+git tag @turnwise/cube-solver@1.0.0
+```
+
+```bash
+git push --follow-tags
+```
+
+Publishing cannot be undone: a version number, once used, can never be used again.
 
 ## License
 
