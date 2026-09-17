@@ -1,7 +1,20 @@
 export { applyMoves, cubeFromMoves, isSolved } from './cube';
 export type { Cube } from './cube';
+export type { CornerPosition, EdgePosition } from './cubie';
+export {
+  CornerTwistError,
+  DuplicatePieceError,
+  EdgeFlipError,
+  InvalidCubeError,
+  ParityError,
+  StickerCountError,
+  UnknownPieceError,
+} from './errors';
+export type { ObservedPiece } from './errors';
 export { Faces } from './face';
 export type { Face } from './face';
+export type { StickerLocation } from './facelets';
+export { cubeFromFaces } from './fromFaces';
 export { facesFromCube } from './grid';
 export type { FaceGrid, FaceStickers } from './grid';
 export { Moves, faceOf, formatAlgorithm, inverse, turnsOf } from './move';
