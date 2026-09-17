@@ -16,7 +16,7 @@ export default defineConfig({
     dts({
       bundleTypes: true,
       tsconfigPath: './tsconfig.src.json',
-      exclude: ['src/**/*.test.ts', 'src/**/*.test-d.ts'],
+      exclude: ['src/**/*.test.ts', 'src/**/*.test-d.ts', 'src/testing/**'],
     }),
   ],
   test: {
