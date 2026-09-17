@@ -761,7 +761,7 @@ TypeScript callers cannot reach these. They exist for plain JavaScript and for d
 
 ## Performance and threading
 
-| What | Cost |
+| | Cost |
 | --- | --- |
 | Importing the package | nothing: no tables are built, and unused exports can be tree-shaken away |
 | The first `solve`, or `prepare()` | about 0.3 s and 6 MB, once per thread |
