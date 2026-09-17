@@ -9,4 +9,5 @@ packages/*/LICENSE
 coverage/
 dist/
 e2e/.pack/
+e2e/consumer/src/generated/
 node_modules/
