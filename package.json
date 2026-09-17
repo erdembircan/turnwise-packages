@@ -17,9 +17,13 @@
     "test:watch": "vitest",
     "license:verify": "license-wizard --verify --strict",
     "check:package": "pnpm -r check:package",
-    "check": "pnpm typecheck && pnpm lint && pnpm test && pnpm build && pnpm check:package && pnpm license:verify"
+    "check": "pnpm typecheck && pnpm lint && pnpm test && pnpm build && pnpm check:package && pnpm license:verify",
+    "changeset": "changeset",
+    "version-packages": "changeset version",
+    "release": "pnpm check && changeset publish"
   },
   "devDependencies": {
+    "@changesets/cli": "catalog:",
     "@eslint/js": "catalog:",
     "@types/node": "catalog:",
     "eslint": "catalog:",
