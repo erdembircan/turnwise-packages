@@ -1,8 +1,10 @@
 // Every example in the package README, in order, compiled against the published types. If the
 // README changes, change this file with it.
 import {
+  Efforts,
   Faces,
   InvalidCubeError,
+  Moves,
   UnknownPieceError,
   applyMoves,
   cubeFromFaces,
@@ -17,22 +19,32 @@ import {
 import type { FaceGrid, Move, StickerLocation } from '@turnwise/cube-solver';
 
 // Solve a cube from its stickers
+const { U, R, F, D, L, B } = Faces;
+
 const cube = cubeFromFaces({
-  U: ['D', 'U', 'B', 'F', 'U', 'D', 'U', 'U', 'R'],
-  R: ['D', 'L', 'R', 'F', 'R', 'F', 'L', 'D', 'R'],
-  F: ['F', 'F', 'F', 'B', 'F', 'L', 'R', 'L', 'U'],
-  D: ['U', 'U', 'B', 'B', 'D', 'R', 'D', 'U', 'U'],
-  L: ['B', 'D', 'L', 'B', 'L', 'D', 'F', 'R', 'B'],
-  B: ['D', 'B', 'L', 'R', 'B', 'L', 'F', 'R', 'L'],
+  U: [D, U, B, F, U, D, U, U, R],
+  R: [D, L, R, F, R, F, L, D, R],
+  F: [F, F, F, B, F, L, R, L, U],
+  D: [U, U, B, B, D, R, D, U, U],
+  L: [B, D, L, B, L, D, F, R, B],
+  B: [D, B, L, R, B, L, F, R, L],
 });
 const solution: Move[] = solve(cube);
 export const notation: string = formatAlgorithm(solution);
 
-const { U, R, F, D, B } = Faces;
-export const top = [D, U, B, F, U, D, U, U, R] as const;
-
 // Solve a cube from the moves that scrambled it
-const scrambled = cubeFromMoves(['F', 'R2', 'U_PRIME', 'B', 'L2', 'D', 'F2', 'R_PRIME', 'U2', 'L']);
+const scrambled = cubeFromMoves([
+  Moves.F,
+  Moves.R2,
+  Moves.U_PRIME,
+  Moves.B,
+  Moves.L2,
+  Moves.D,
+  Moves.F2,
+  Moves.R_PRIME,
+  Moves.U2,
+  Moves.L,
+]);
 export const fromMoves: Move[] = solve(scrambled);
 export const solved: boolean = isSolved(applyMoves(cube, solution));
 export const scramble: Move[] = inverse(solution);
@@ -59,4 +71,4 @@ try {
 
 // Speed, and where to run it
 prepare();
-export const quick: Move[] = solve(cube, { effort: 'fast' });
+export const quick: Move[] = solve(cube, { effort: Efforts.fast });

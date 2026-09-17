@@ -6,6 +6,7 @@ const importMs = performance.now() - importStarted;
 
 const {
   CornerTwistError,
+  Efforts,
   FaceletStringError,
   InvalidCubeError,
   applyMoves,
@@ -49,7 +50,7 @@ for (const cube of [fromMoves, fromFaces, fromString]) {
 assert.equal(formatAlgorithm(expected), "L' U2 R F2 D' L2 B' U R2 F'");
 assert.deepEqual(inverse(expected), scramble);
 
-const fast = solve(fromMoves, { effort: 'fast' });
+const fast = solve(fromMoves, { effort: Efforts.fast });
 assert.ok(isSolved(applyMoves(fromMoves, fast)));
 assert.ok(fast.length <= 24);
 
@@ -78,6 +79,7 @@ assert.deepEqual(Object.keys(api).sort(), [
   'CornerTwistError',
   'DuplicatePieceError',
   'EdgeFlipError',
+  'Efforts',
   'FaceletStringError',
   'Faces',
   'InvalidCubeError',
