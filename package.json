@@ -16,7 +16,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "license:verify": "license-wizard --verify --strict",
-    "check": "pnpm typecheck && pnpm lint && pnpm test && pnpm build && pnpm license:verify"
+    "check:package": "pnpm -r check:package",
+    "check": "pnpm typecheck && pnpm lint && pnpm test && pnpm build && pnpm check:package && pnpm license:verify"
   },
   "devDependencies": {
     "@eslint/js": "catalog:",

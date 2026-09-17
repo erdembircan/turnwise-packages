@@ -2,6 +2,7 @@
 *.log
 *.tsbuildinfo
 .DS_Store
+packages/*/LICENSE
 
 # folders
 .claude/

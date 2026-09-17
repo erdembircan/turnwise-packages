@@ -10,6 +10,8 @@
     "url": "git+https://github.com/erdembircan/turnwise-packages.git",
     "directory": "packages/cube-solver"
   },
+  "homepage": "https://github.com/erdembircan/turnwise-packages/tree/main/packages/cube-solver#readme",
+  "bugs": "https://github.com/erdembircan/turnwise-packages/issues",
   "type": "module",
   "sideEffects": false,
   "exports": {
@@ -23,11 +25,16 @@
   "publishConfig": { "access": "public" },
   "scripts": {
     "build": "vite build",
-    "typecheck": "tsc -b"
+    "typecheck": "tsc -b",
+    "prepack": "cp ../../LICENSE LICENSE",
+    "postpack": "rm LICENSE",
+    "check:package": "publint --strict && attw --pack . --profile esm-only"
   },
   "devDependencies": {
+    "@arethetypeswrong/cli": "catalog:",
     "@microsoft/api-extractor": "catalog:",
     "@types/node": "catalog:",
+    "publint": "catalog:",
     "typescript": "catalog:",
     "vite": "catalog:",
     "vite-plugin-dts": "catalog:",
