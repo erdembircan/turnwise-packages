@@ -5,7 +5,8 @@ import type { Face } from './face';
 import { cubeFromFaces } from './fromFaces';
 import { Moves, faceOf, inverse } from './move';
 import type { Move } from './move';
-import { prepare, solve } from './solve';
+import { Efforts, prepare, solve } from './solve';
+import { Efforts as EffortsFromIndex } from './index';
 import { asGrid, randomMoves } from './testing/grids';
 import { readOracle, solvedOracle, turnOracle } from './testing/oracle';
 import { seededRandom } from './testing/rng';
@@ -60,6 +61,31 @@ function asReturningUnknown(fn: () => void): () => unknown {
 }
 
 const callPrepare = asReturningUnknown(prepare);
+
+describe('Efforts', () => {
+  it('has keys fast, full in that order', () => {
+    expect(Object.keys(Efforts)).toEqual(['fast', 'full']);
+  });
+
+  it('maps every key to itself', () => {
+    for (const key of Object.keys(Efforts) as (keyof typeof Efforts)[]) {
+      expect(Efforts[key]).toBe(key);
+    }
+  });
+
+  it('is the same object whether imported from ./index or ./solve', () => {
+    expect(EffortsFromIndex).toBe(Efforts);
+  });
+
+  it('gives the same solution as the matching string literal, for 3 seeds', () => {
+    for (let seed = 1; seed <= 3; seed++) {
+      const cube = cubeFromMoves(randomMoves(seed));
+      const label = `seed ${String(seed)}`;
+      expect(solve(cube, { effort: Efforts.fast }), label).toEqual(solve(cube, { effort: 'fast' }));
+      expect(solve(cube, { effort: Efforts.full }), label).toEqual(solve(cube));
+    }
+  });
+});
 
 describe('solve', () => {
   it('returns an empty solution for a solved cube', () => {

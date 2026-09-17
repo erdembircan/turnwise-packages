@@ -4,8 +4,8 @@ import type { Cube } from './cube';
 import { facesFromCube } from './grid';
 import { inverse } from './move';
 import type { Move } from './move';
-import { prepare, solve } from './solve';
-import type { SolveOptions } from './solve';
+import { Efforts, prepare, solve } from './solve';
+import type { Effort, SolveOptions } from './solve';
 
 const cube: Cube = cubeFromMoves([]);
 
@@ -15,12 +15,26 @@ it('types solve as returning Move[], with an optional second parameter', () => {
 });
 
 it("types SolveOptions['effort']", () => {
-  expectTypeOf<SolveOptions['effort']>().toEqualTypeOf<'fast' | 'full' | undefined>();
+  expectTypeOf<SolveOptions['effort']>().toEqualTypeOf<Effort | undefined>();
+});
+
+it('types Efforts.fast and Efforts.full as their own literal', () => {
+  expectTypeOf(Efforts.fast).toEqualTypeOf<'fast'>();
+  expectTypeOf(Efforts.full).toEqualTypeOf<'full'>();
+});
+
+it('types (typeof Efforts)[Effort] as Effort', () => {
+  expectTypeOf<(typeof Efforts)[Effort]>().toEqualTypeOf<Effort>();
 });
 
 it('rejects an unknown effort', () => {
   // @ts-expect-error 'turbo' is not a valid effort.
   solve(cube, { effort: 'turbo' });
+});
+
+it('rejects an unknown key on Efforts', () => {
+  // @ts-expect-error 'turbo' is not a key of Efforts.
+  expectTypeOf(Efforts.turbo);
 });
 
 it('accepts only a Cube, not a string or a FaceGrid', () => {

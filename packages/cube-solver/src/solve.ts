@@ -4,25 +4,37 @@ import type { Move } from './move';
 import { search } from './solver/search';
 import { getTables } from './solver/tables';
 
+/**
+ * How hard {@link solve} looks for a short solution. Both efforts always succeed.
+ *
+ * - `'full'` keeps improving on its first solution for a fixed amount of work: about a tenth of a
+ *   second. A scrambled cube comes back in about 20 moves, and a cube that is only a few moves from
+ *   solved comes back in that few.
+ * - `'fast'` stops almost at once, after a few milliseconds. A scrambled cube comes back in about
+ *   23 moves, 24 at most in practice. A cube that is only a few moves from solved may still get a
+ *   longer answer than it needs.
+ *
+ * Work is counted in positions examined, not in time, so the same cube and effort always give the
+ * same solution.
+ */
+export type Effort = 'fast' | 'full';
+
+/**
+ * Every {@link Effort}, keyed by itself, for callers who prefer `Efforts.fast` to the literal
+ * `'fast'`. Both spellings are the same value and the same type.
+ */
+export const Efforts: { readonly [E in Effort]: E } = {
+  fast: 'fast',
+  full: 'full',
+};
+
 /** Options for {@link solve}. */
 export interface SolveOptions {
-  /**
-   * How hard to look for a short solution. Both efforts always succeed.
-   *
-   * - `'full'` (the default) keeps improving on its first solution for a fixed amount of work: about
-   *   a tenth of a second. A scrambled cube comes back in about 20 moves, and a cube that is only a
-   *   few moves from solved comes back in that few.
-   * - `'fast'` stops almost at once, after a few milliseconds. A scrambled cube comes back in about
-   *   23 moves, 24 at most in practice. A cube that is only a few moves from solved may still get a
-   *   longer answer than it needs.
-   *
-   * Work is counted in positions examined, not in time, so the same cube and effort always give the
-   * same solution.
-   */
-  readonly effort?: 'fast' | 'full';
+  /** How hard to look for a short solution. The default is `'full'`. */
+  readonly effort?: Effort;
 }
 
-const NODE_BUDGET: Readonly<Record<'fast' | 'full', number>> = {
+const NODE_BUDGET: Readonly<Record<Effort, number>> = {
   fast: 100_000,
   full: 5_000_000,
 };
