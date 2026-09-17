@@ -20,6 +20,16 @@ pnpm check
 
 `pnpm check` runs everything CI runs: type checking, linting, tests, the build, and license verification. Each step is also available on its own as `pnpm typecheck`, `pnpm lint`, `pnpm test`, `pnpm build` and `pnpm license:verify`.
 
+## Releasing
+
+Versions and changelogs are managed with [Changesets](https://github.com/changesets/changesets).
+
+```bash
+pnpm changeset
+```
+
+Run that in any pull request that changes a package, and commit the file it writes. To cut a release, `pnpm version-packages` applies the pending changesets, and `pnpm release` runs every check and publishes.
+
 ## License
 
 [Apache-2.0](LICENSE) © Erdem Bircan
