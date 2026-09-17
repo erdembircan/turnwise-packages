@@ -1,1 +1,4 @@
-export { Faces, type Face } from './face';
+export { Faces } from './face';
+export type { Face } from './face';
+export { Moves, faceOf, formatAlgorithm, inverse, turnsOf } from './move';
+export type { Move } from './move';
