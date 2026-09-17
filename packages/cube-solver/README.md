@@ -137,9 +137,9 @@ Once you hold a `Cube`, it is legal. `solve` never rejects one and never fails t
 
 ## Speed, and where to run it
 
-| | Time | Result |
+| What | Time | Result |
 | --- | --- | --- |
-| Importing the package | nothing | |
+| Importing the package | nothing | no tables are built |
 | First `solve`, or `prepare()` | about 0.3 s, once | builds 6 MB of lookup tables |
 | `solve(cube)` | about 0.1 s | about 20 moves |
 | `solve(cube, { effort: Efforts.fast })` | a few milliseconds | about 23 moves |
@@ -156,7 +156,7 @@ Work is counted in positions examined, not in time, so the same cube and effort 
 
 It ships inside the package, at `node_modules/@turnwise/cube-solver/docs/documentation.md`, so it always matches the version you have installed, and a coding agent working in your project can read it without leaving the folder. Its examples are compiled against the published types on every change.
 
-| | |
+| Task | Exports |
 | --- | --- |
 | Make a cube | `cubeFromFaces`, `cubeFromMoves`, `parseFaceletString` |
 | Solve | `solve`, `prepare` |
