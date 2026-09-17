@@ -1,0 +1,10 @@
+# files
+*.log
+*.tsbuildinfo
+.DS_Store
+
+# folders
+.claude/
+coverage/
+dist/
+node_modules/
