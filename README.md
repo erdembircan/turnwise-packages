@@ -1,3 +1,10 @@
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/turnwise-dark.svg">
+    <img alt="Turnwise" src="assets/turnwise-light.svg" width="360">
+  </picture>
+</p>
+
 # turnwise-packages
 
 Typed Rubik's Cube packages, published under the `@turnwise` npm scope.
