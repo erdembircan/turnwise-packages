@@ -21,5 +21,5 @@ export { facesFromCube } from './grid';
 export type { FaceGrid, FaceStickers } from './grid';
 export { Moves, faceOf, formatAlgorithm, inverse, turnsOf } from './move';
 export type { Move } from './move';
-export { prepare, solve } from './solve';
-export type { SolveOptions } from './solve';
+export { Efforts, prepare, solve } from './solve';
+export type { Effort, SolveOptions } from './solve';
