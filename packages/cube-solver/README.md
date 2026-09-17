@@ -1,3 +1,10 @@
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="../../assets/turnwise-dark.svg">
+    <img alt="Turnwise" src="../../assets/turnwise-light.svg" width="360">
+  </picture>
+</p>
+
 # @turnwise/cube-solver
 
 Solves a 3×3 Rubik's Cube with Kociemba's two-phase algorithm. Written in TypeScript, with no dependencies, for browsers, workers, Node, Deno and Bun.
@@ -10,22 +17,24 @@ pnpm add @turnwise/cube-solver
 
 ## Solve a cube from its stickers
 
-Name every sticker by the face it belongs to, which is the face whose centre has the same colour. That keeps the input independent of any colour scheme.
+Name every sticker by the face it belongs to, which is the face whose centre has the same colour. That keeps the input independent of any colour scheme. `Faces` holds the six names:
 
 ```ts
-import { cubeFromFaces, formatAlgorithm, solve } from '@turnwise/cube-solver';
+import { Faces, cubeFromFaces, formatAlgorithm, solve } from '@turnwise/cube-solver';
+
+const { U, R, F, D, L, B } = Faces;
 
 const cube = cubeFromFaces({
-  U: ['D', 'U', 'B', 'F', 'U', 'D', 'U', 'U', 'R'],
-  R: ['D', 'L', 'R', 'F', 'R', 'F', 'L', 'D', 'R'],
-  F: ['F', 'F', 'F', 'B', 'F', 'L', 'R', 'L', 'U'],
-  D: ['U', 'U', 'B', 'B', 'D', 'R', 'D', 'U', 'U'],
-  L: ['B', 'D', 'L', 'B', 'L', 'D', 'F', 'R', 'B'],
-  B: ['D', 'B', 'L', 'R', 'B', 'L', 'F', 'R', 'L'],
+  U: [D, U, B, F, U, D, U, U, R],
+  R: [D, L, R, F, R, F, L, D, R],
+  F: [F, F, F, B, F, L, R, L, U],
+  D: [U, U, B, B, D, R, D, U, U],
+  L: [B, D, L, B, L, D, F, R, B],
+  B: [D, B, L, R, B, L, F, R, L],
 });
 
 const solution = solve(cube);
-// ['L_PRIME', 'U2', 'R', 'F2', 'D_PRIME', 'L2', 'B_PRIME', 'U', 'R2', 'F_PRIME']
+// [Moves.L_PRIME, Moves.U2, Moves.R, Moves.F2, Moves.D_PRIME, Moves.L2, Moves.B_PRIME, Moves.U, Moves.R2, Moves.F_PRIME]
 
 formatAlgorithm(solution);
 // "L' U2 R F2 D' L2 B' U R2 F'"
@@ -36,30 +45,34 @@ Each face is nine stickers, read row by row while looking straight at that face:
 ```
 0 1 2
 3 4 5      4 is the centre. It never moves, so its type is fixed:
-6 7 8      the centre of U must be 'U', or the code does not compile.
+6 7 8      the centre of U must be Faces.U, or the code does not compile.
 ```
 
 Hold the cube with U on top and F towards you. Read U with B at the top, D with F at the top, and R, F, L and B with U at the top.
 
-`Faces.U` is the same value as `'U'`, if you prefer a lookup to a literal:
-
-```ts
-import { Faces } from '@turnwise/cube-solver';
-
-const { U, R, F, D, L, B } = Faces;
-const top = [D, U, B, F, U, D, U, U, R] as const;
-```
+`Faces.U` is the plain string `'U'`, and `Moves.R_PRIME` is `'R_PRIME'`, so a cube's stickers and a solution survive JSON, `postMessage` and a database unchanged. The literals are accepted wherever the constants are. The constants are the recommended spelling: your editor completes them, and a typo cannot hide inside a string.
 
 ## Solve a cube from the moves that scrambled it
 
 ```ts
-import { cubeFromMoves, solve } from '@turnwise/cube-solver';
+import { Moves, cubeFromMoves, solve } from '@turnwise/cube-solver';
 
-const cube = cubeFromMoves(['F', 'R2', 'U_PRIME', 'B', 'L2', 'D', 'F2', 'R_PRIME', 'U2', 'L']);
+const cube = cubeFromMoves([
+  Moves.F,
+  Moves.R2,
+  Moves.U_PRIME,
+  Moves.B,
+  Moves.L2,
+  Moves.D,
+  Moves.F2,
+  Moves.R_PRIME,
+  Moves.U2,
+  Moves.L,
+]);
 const solution = solve(cube);
 ```
 
-There are exactly eighteen moves, and `Move` is the union of their names: a face letter, then nothing for a clockwise quarter turn, `2` for a half turn, or `_PRIME` for a counter-clockwise quarter turn. Clockwise means clockwise as seen looking straight at the face, as in standard cube notation. `'R3'`, `'X'` and `"R'"` do not compile. `Moves.R_PRIME` is the same value as `'R_PRIME'`.
+There are exactly eighteen moves, and `Moves` holds them all: a face letter, then nothing for a clockwise quarter turn, `2` for a half turn, or `_PRIME` for a counter-clockwise quarter turn. Clockwise means clockwise as seen looking straight at the face, as in standard cube notation. `Moves.R3` does not exist, and the strings `'R3'`, `'X'` and `"R'"` do not compile either.
 
 A solution is an array of the same `Move` values, so it can go straight back in:
 
@@ -129,9 +142,9 @@ Once you hold a `Cube`, it is legal. `solve` never rejects one and never fails t
 | Importing the package | nothing | |
 | First `solve`, or `prepare()` | about 0.3 s, once | builds 6 MB of lookup tables |
 | `solve(cube)` | about 0.1 s | about 20 moves |
-| `solve(cube, { effort: 'fast' })` | a few milliseconds | about 23 moves |
+| `solve(cube, { effort: Efforts.fast })` | a few milliseconds | about 23 moves |
 
-With the default effort, a cube that is only a few moves from solved comes back in that few moves. With `'fast'` it may get a longer answer than it needs.
+With the default effort, `Efforts.full`, a cube that is only a few moves from solved comes back in that few moves. With `Efforts.fast` it may get a longer answer than it needs.
 
 Work is counted in positions examined, not in time, so the same cube and effort always give the same solution.
 
@@ -149,7 +162,7 @@ It ships inside the package, at `node_modules/@turnwise/cube-solver/docs/documen
 | Solve | `solve`, `prepare` |
 | Work with a cube | `applyMoves`, `isSolved`, `facesFromCube` |
 | Work with moves | `inverse`, `faceOf`, `turnsOf`, `formatAlgorithm` |
-| Values | `Faces`, `Moves` |
+| Values | `Faces`, `Moves`, `Efforts` |
 | Errors | `InvalidCubeError` and six subclasses, `FaceletStringError` |
 
 Every export also carries its documentation into your editor.

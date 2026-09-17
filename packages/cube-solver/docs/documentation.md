@@ -6,7 +6,7 @@ Every `ts` example on this page is compiled against the published types on every
 
 - [Concepts](#concepts)
 - [Making a cube](#making-a-cube): [`cubeFromFaces`](#cubefromfaces), [`cubeFromMoves`](#cubefrommoves), [`parseFaceletString`](#parsefaceletstring)
-- [Solving](#solving): [`solve`](#solve), [`prepare`](#prepare), [`SolveOptions`](#solveoptions)
+- [Solving](#solving): [`solve`](#solve), [`prepare`](#prepare), [`SolveOptions`](#solveoptions), [`Effort`](#effort), [`Efforts`](#efforts)
 - [Working with a cube](#working-with-a-cube): [`applyMoves`](#applymoves), [`isSolved`](#issolved), [`facesFromCube`](#facesfromcube)
 - [Working with moves](#working-with-moves): [`inverse`](#inverse), [`faceOf`](#faceof), [`turnsOf`](#turnsof), [`formatAlgorithm`](#formatalgorithm)
 - [Values and types](#values-and-types): [`Face`](#face), [`Faces`](#faces), [`Move`](#move), [`Moves`](#moves), [`Cube`](#cube), [`FaceGrid`](#facegrid), [`FaceStickers`](#facestickers), [`StickerLocation`](#stickerlocation), [`CornerPosition`](#cornerposition), [`EdgePosition`](#edgeposition), [`ObservedPiece`](#observedpiece)
@@ -78,7 +78,7 @@ Unfolded, with each face in the orientation it is read in:
         └───────┘
 ```
 
-A sticker's value is the letter of the face it belongs to. On a solved cube every sticker of `U` is `'U'`. After the single move `U`, the top row of `F` reads `'R'`, `'R'`, `'R'`: a clockwise turn of the top layer, seen from above, carries the right face's stickers round to the front.
+A sticker's value is the name of the face it belongs to: one of the six values in [`Faces`](#faces). On a solved cube every sticker of `U` is `Faces.U`. After the single move `Moves.U`, the top row of `F` reads `Faces.R`, `Faces.R`, `Faces.R`: a clockwise turn of the top layer, seen from above, carries the right face's stickers round to the front.
 
 ### Moves
 
@@ -107,33 +107,37 @@ function cubeFromFaces(faces: FaceGrid): Cube;
 The cube that shows the stickers in `faces`. See [Reading a face](#reading-a-face) for how to fill in a [`FaceGrid`](#facegrid).
 
 ```ts
-import { cubeFromFaces } from '@turnwise/cube-solver';
+import { Faces, cubeFromFaces } from '@turnwise/cube-solver';
+
+const { U, R, F, D, L, B } = Faces;
 
 const cube = cubeFromFaces({
-  U: ['D', 'U', 'B', 'F', 'U', 'D', 'U', 'U', 'R'],
-  R: ['D', 'L', 'R', 'F', 'R', 'F', 'L', 'D', 'R'],
-  F: ['F', 'F', 'F', 'B', 'F', 'L', 'R', 'L', 'U'],
-  D: ['U', 'U', 'B', 'B', 'D', 'R', 'D', 'U', 'U'],
-  L: ['B', 'D', 'L', 'B', 'L', 'D', 'F', 'R', 'B'],
-  B: ['D', 'B', 'L', 'R', 'B', 'L', 'F', 'R', 'L'],
+  U: [D, U, B, F, U, D, U, U, R],
+  R: [D, L, R, F, R, F, L, D, R],
+  F: [F, F, F, B, F, L, R, L, U],
+  D: [U, U, B, B, D, R, D, U, U],
+  L: [B, D, L, B, L, D, F, R, B],
+  B: [D, B, L, R, B, L, F, R, L],
 });
 ```
 
 The compiler rejects a grid of the wrong shape:
 
 ```ts
+import { Faces } from '@turnwise/cube-solver';
 import type { FaceGrid, FaceStickers } from '@turnwise/cube-solver';
 
+const { U, R } = Faces;
 declare const rest: Omit<FaceGrid, 'U'>;
 
 // @ts-expect-error a face has nine stickers, not eight
-const eight: FaceStickers<'U'> = ['U', 'U', 'U', 'U', 'U', 'U', 'U', 'U'];
+const eight: FaceStickers<'U'> = [U, U, U, U, U, U, U, U];
 
-// @ts-expect-error 'X' is not a face letter
-const letter: FaceStickers<'U'> = ['X', 'U', 'U', 'U', 'U', 'U', 'U', 'U', 'U'];
+// @ts-expect-error the centre of U must be U
+const centre: FaceStickers<'U'> = [U, U, U, U, R, U, U, U, U];
 
-// @ts-expect-error the centre of U must be 'U'
-const centre: FaceStickers<'U'> = ['U', 'U', 'U', 'U', 'R', 'U', 'U', 'U', 'U'];
+// @ts-expect-error 'X' is not a face
+const letter: FaceStickers<'U'> = ['X', U, U, U, U, U, U, U, U];
 
 // @ts-expect-error the U face is missing
 const missing: FaceGrid = { ...rest };
@@ -162,9 +166,20 @@ function cubeFromMoves(moves: readonly Move[]): Cube;
 The cube reached by applying `moves`, in order, to a solved cube. An empty list gives the solved cube, which is how you get one.
 
 ```ts
-import { cubeFromMoves, isSolved } from '@turnwise/cube-solver';
+import { Moves, cubeFromMoves, isSolved } from '@turnwise/cube-solver';
 
-const scrambled = cubeFromMoves(['F', 'R2', 'U_PRIME', 'B', 'L2', 'D', 'F2', 'R_PRIME', 'U2', 'L']);
+const scrambled = cubeFromMoves([
+  Moves.F,
+  Moves.R2,
+  Moves.U_PRIME,
+  Moves.B,
+  Moves.L2,
+  Moves.D,
+  Moves.F2,
+  Moves.R_PRIME,
+  Moves.U2,
+  Moves.L,
+]);
 const solved = cubeFromMoves([]);
 
 isSolved(solved); // true
@@ -173,10 +188,10 @@ isSolved(solved); // true
 Every list of moves leads to a legal cube, so this never rejects a typed input. The compiler rejects anything that is not a move:
 
 ```ts
-import { cubeFromMoves } from '@turnwise/cube-solver';
+import { Moves, cubeFromMoves } from '@turnwise/cube-solver';
 
-// @ts-expect-error 'R_PRIM' is not a move
-cubeFromMoves(['R', 'U', 'R_PRIM']);
+// @ts-expect-error there is no Moves.R_PRIM
+cubeFromMoves([Moves.R, Moves.U, Moves.R_PRIM]);
 ```
 
 **Throws** `TypeError` for an unknown move, which is only reachable by bypassing the compiler.
@@ -201,11 +216,11 @@ const cube = cubeFromFaces(faces);
 To write one, join the faces of a grid in the same order:
 
 ```ts
-import { cubeFromMoves, facesFromCube } from '@turnwise/cube-solver';
+import { Faces, Moves, cubeFromMoves, facesFromCube } from '@turnwise/cube-solver';
 import type { Face } from '@turnwise/cube-solver';
 
-const order: readonly Face[] = ['U', 'R', 'F', 'D', 'L', 'B'];
-const grid = facesFromCube(cubeFromMoves(['R', 'U']));
+const order: readonly Face[] = Object.values(Faces);
+const grid = facesFromCube(cubeFromMoves([Moves.R, Moves.U]));
 const text = order.map((face) => grid[face].join('')).join('');
 ```
 
@@ -222,12 +237,30 @@ function solve(cube: Cube, options?: SolveOptions): Move[];
 A short sequence of moves that solves `cube`, found with Kociemba's two-phase algorithm. A solved cube gives an empty list.
 
 ```ts
-import { applyMoves, cubeFromMoves, formatAlgorithm, isSolved, solve } from '@turnwise/cube-solver';
+import {
+  Moves,
+  applyMoves,
+  cubeFromMoves,
+  formatAlgorithm,
+  isSolved,
+  solve,
+} from '@turnwise/cube-solver';
 
-const cube = cubeFromMoves(['F', 'R2', 'U_PRIME', 'B', 'L2', 'D', 'F2', 'R_PRIME', 'U2', 'L']);
+const cube = cubeFromMoves([
+  Moves.F,
+  Moves.R2,
+  Moves.U_PRIME,
+  Moves.B,
+  Moves.L2,
+  Moves.D,
+  Moves.F2,
+  Moves.R_PRIME,
+  Moves.U2,
+  Moves.L,
+]);
 
 const solution = solve(cube);
-// ['L_PRIME', 'U2', 'R', 'F2', 'D_PRIME', 'L2', 'B_PRIME', 'U', 'R2', 'F_PRIME']
+// [Moves.L_PRIME, Moves.U2, Moves.R, Moves.F2, Moves.D_PRIME, Moves.L2, Moves.B_PRIME, Moves.U, Moves.R2, Moves.F_PRIME]
 
 formatAlgorithm(solution); // "L' U2 R F2 D' L2 B' U R2 F'"
 isSolved(applyMoves(cube, solution)); // true
@@ -238,7 +271,7 @@ What you can rely on:
 - **It always succeeds.** Every `Cube` is legal, so `solve` never rejects its input and never fails to find a solution.
 - **It is repeatable.** Work is counted in positions examined, not in time, so the same cube and the same effort give the same solution on every machine.
 - **No solution turns the same face twice in a row.**
-- **The result is near-optimal, not optimal.** No cube needs more than 20 moves; this method usually finds 19 to 22. See [`SolveOptions`](#solveoptions) for the two efforts.
+- **The result is near-optimal, not optimal.** No cube needs more than 20 moves; this method usually finds 19 to 22. See [`Effort`](#effort) for the two efforts.
 - **It is synchronous** and keeps its thread busy while it works. See [Performance and threading](#performance-and-threading).
 
 The first call builds the solver's lookup tables, unless [`prepare`](#prepare) already has.
@@ -246,9 +279,9 @@ The first call builds the solver's lookup tables, unless [`prepare`](#prepare) a
 **Throws** `TypeError` when `cube` is not a `Cube` made by this package, or `options.effort` is not a known effort. Both are only reachable by bypassing the compiler. It never throws for a real `Cube`.
 
 ```ts
-import { cubeFromMoves, facesFromCube, solve } from '@turnwise/cube-solver';
+import { Moves, cubeFromMoves, facesFromCube, solve } from '@turnwise/cube-solver';
 
-const cube = cubeFromMoves(['R']);
+const cube = cubeFromMoves([Moves.R]);
 
 // @ts-expect-error solve takes a Cube, not its stickers: pass them through cubeFromFaces
 solve(facesFromCube(cube));
@@ -276,26 +309,49 @@ prepare();
 
 ```ts signature
 interface SolveOptions {
-  readonly effort?: 'fast' | 'full';
+  readonly effort?: Effort;
 }
 ```
 
-| `effort` | Time per cube | A scrambled cube | A cube a few moves from solved |
-| --- | --- | --- | --- |
-| `'full'`, the default | about 0.1 s | about 20 moves | solved in that few moves |
-| `'fast'` | a few milliseconds | about 23 moves, 24 at most in practice | may get a longer answer than it needs |
-
-Both efforts always succeed and are repeatable. `'full'` keeps improving on its first solution for a fixed amount of work; `'fast'` stops almost at once.
+The options of [`solve`](#solve). There is one: how hard to look. Leave it out for [`Efforts.full`](#efforts).
 
 ```ts
-import { cubeFromMoves, solve } from '@turnwise/cube-solver';
+import { Efforts, Moves, cubeFromMoves, solve } from '@turnwise/cube-solver';
 
-const cube = cubeFromMoves(['R', 'U', 'F2']);
+const cube = cubeFromMoves([Moves.R, Moves.U, Moves.F2]);
 
-const quick = solve(cube, { effort: 'fast' });
-const short = solve(cube, { effort: 'full' });
+const quick = solve(cube, { effort: Efforts.fast });
+const short = solve(cube, { effort: Efforts.full }); // the same as solve(cube)
+```
 
-// @ts-expect-error there are two efforts
+### `Effort`
+
+```ts signature
+type Effort = 'fast' | 'full';
+```
+
+How hard [`solve`](#solve) looks for a short solution.
+
+| Effort | Time per cube | A scrambled cube | A cube a few moves from solved |
+| --- | --- | --- | --- |
+| `Efforts.full`, the default | about 0.1 s | about 20 moves | solved in that few moves |
+| `Efforts.fast` | a few milliseconds | about 23 moves, 24 at most in practice | may get a longer answer than it needs |
+
+Both efforts always succeed and are repeatable. `full` keeps improving on its first solution for a fixed amount of work; `fast` stops almost at once.
+
+### `Efforts`
+
+An object with one constant per [`Effort`](#effort), each holding its own name: `Efforts.fast === 'fast'`, with the type `'fast'`. It follows the same pattern as [`Faces`](#faces) and [`Moves`](#moves).
+
+```ts
+import { Efforts, Moves, cubeFromMoves, solve } from '@turnwise/cube-solver';
+
+const cube = cubeFromMoves([Moves.R]);
+
+// @ts-expect-error there are two efforts, and no Efforts.turbo
+solve(cube, { effort: Efforts.turbo });
+
+// @ts-expect-error the string is rejected as well
 solve(cube, { effort: 'turbo' });
 ```
 
@@ -312,10 +368,10 @@ function applyMoves(cube: Cube, moves: readonly Move[]): Cube;
 The cube reached by applying `moves`, in order, to `cube`. `cube` itself is left as it was.
 
 ```ts
-import { applyMoves, cubeFromMoves } from '@turnwise/cube-solver';
+import { Moves, applyMoves, cubeFromMoves } from '@turnwise/cube-solver';
 
-const start = cubeFromMoves(['R', 'U']);
-const next = applyMoves(start, ['R_PRIME']);
+const start = cubeFromMoves([Moves.R, Moves.U]);
+const next = applyMoves(start, [Moves.R_PRIME]);
 // start still describes R U; next describes R U R'
 ```
 
@@ -340,11 +396,11 @@ function facesFromCube(cube: Cube): FaceGrid;
 The stickers of `cube`, as a new [`FaceGrid`](#facegrid). Use it to draw a cube, to compare two cubes, or to send a cube somewhere a `Cube` cannot go, such as a worker or a file.
 
 ```ts
-import { cubeFromFaces, cubeFromMoves, facesFromCube } from '@turnwise/cube-solver';
+import { Faces, Moves, cubeFromFaces, cubeFromMoves, facesFromCube } from '@turnwise/cube-solver';
 
-const grid = facesFromCube(cubeFromMoves(['U']));
-grid.F[0]; // 'R'
-grid.U[4]; // 'U', always
+const grid = facesFromCube(cubeFromMoves([Moves.U]));
+grid[Faces.F][0]; // Faces.R
+grid[Faces.U][4]; // Faces.U, always
 
 const same = cubeFromFaces(grid); // the round trip gives an equal cube
 ```
@@ -365,11 +421,11 @@ For one move: the move that undoes it. A half turn undoes itself.
 For a list: the sequence that undoes the whole list, which is every move inverted, in reverse order. It returns a new array and leaves the input as it was. The inverse of a solution is a scramble that produces the cube it solves.
 
 ```ts
-import { inverse } from '@turnwise/cube-solver';
+import { Moves, inverse } from '@turnwise/cube-solver';
 
-inverse('R'); // 'R_PRIME'
-inverse('F2'); // 'F2'
-inverse(['R', 'U2', 'F_PRIME']); // ['F', 'U2', 'R_PRIME']
+inverse(Moves.R); // Moves.R_PRIME
+inverse(Moves.F2); // Moves.F2
+inverse([Moves.R, Moves.U2, Moves.F_PRIME]); // [Moves.F, Moves.U2, Moves.R_PRIME]
 ```
 
 **Throws** `TypeError` for an unknown move.
@@ -391,14 +447,14 @@ function turnsOf(move: Move): 1 | 2 | 3;
 How far a move turns its face, in clockwise quarter turns: `1` for a quarter turn, `2` for a half turn, `3` for a counter-clockwise quarter turn.
 
 ```ts
-import { faceOf, turnsOf } from '@turnwise/cube-solver';
+import { Moves, faceOf, turnsOf } from '@turnwise/cube-solver';
 
-faceOf('R_PRIME'); // 'R'
-turnsOf('R_PRIME'); // 3
+faceOf(Moves.R_PRIME); // Faces.R
+turnsOf(Moves.R_PRIME); // 3
 
 // For an animation, a counter-clockwise turn is better shown as one quarter turn backwards
 // than as three forwards.
-const quarterTurns = turnsOf('R_PRIME') === 3 ? -1 : turnsOf('R_PRIME');
+const quarterTurns = turnsOf(Moves.R_PRIME) === 3 ? -1 : turnsOf(Moves.R_PRIME);
 ```
 
 Both throw `TypeError` for an unknown move.
@@ -412,16 +468,18 @@ function formatAlgorithm(moves: readonly Move[]): string;
 The moves in traditional cube notation, separated by spaces. An empty list gives an empty string. This is for showing to people; nothing in the package reads it back.
 
 ```ts
-import { formatAlgorithm } from '@turnwise/cube-solver';
+import { Moves, formatAlgorithm } from '@turnwise/cube-solver';
 
-formatAlgorithm(['R', 'U_PRIME', 'F2']); // "R U' F2"
+formatAlgorithm([Moves.R, Moves.U_PRIME, Moves.F2]); // "R U' F2"
 ```
 
 **Throws** `TypeError` for an unknown move.
 
 ## Values and types
 
-`Face` and `Move` are unions of string literals, so a value of either type is a plain string: it survives `JSON.stringify`, `postMessage` and a database unchanged. `Faces` and `Moves` are lookup objects holding the same values, for code that prefers `Moves.R_PRIME` to `'R_PRIME'`. The two spellings are the same value and the same type, and can be mixed freely.
+`Faces`, `Moves` and [`Efforts`](#efforts) hold every face, move and effort as constants, and they are the recommended way to write one: your editor completes `Moves.` into the eighteen real moves, and a typo cannot hide inside a string.
+
+The constants are plain strings, `Moves.R_PRIME === 'R_PRIME'`, which is why a sticker grid and a solution survive `JSON.stringify`, `postMessage` and a database unchanged. `Face` and `Move` are the unions of those strings, so a string literal is accepted wherever a constant is, and data read back from storage needs no conversion.
 
 ### `Face`
 
@@ -442,7 +500,7 @@ import { Faces } from '@turnwise/cube-solver';
 import type { Face } from '@turnwise/cube-solver';
 
 const { U, R, F, D, B } = Faces;
-const top = [D, U, B, F, U, D, U, U, R] as const;
+const top = [D, U, B, F, U, D, U, U, R] as const; // destructured, a face reads like a sticker chart
 
 const all: Face[] = Object.values(Faces); // every face, in the order U, R, F, D, L, B
 ```
@@ -462,12 +520,16 @@ type Move =
 One of the eighteen moves: see [Moves](#moves).
 
 ```ts
+import { Moves } from '@turnwise/cube-solver';
 import type { Move } from '@turnwise/cube-solver';
 
-const fine: Move = 'R_PRIME';
+const fine: Move = Moves.R_PRIME;
 
 // @ts-expect-error there is no such move
 const three: Move = 'R3';
+
+// @ts-expect-error and there is no such constant
+const alsoThree: Move = Moves.R3;
 
 // @ts-expect-error traditional notation is output only
 const apostrophe: Move = "R'";
@@ -475,13 +537,13 @@ const apostrophe: Move = "R'";
 
 ### `Moves`
 
-An object with one key per [`Move`](#move), each holding its own name: `Moves.R_PRIME === 'R_PRIME'`, with the type `'R_PRIME'`.
+An object with one constant per [`Move`](#move), each holding its own name: `Moves.R_PRIME === 'R_PRIME'`, with the type `'R_PRIME'`.
 
 ```ts
 import { Moves, cubeFromMoves } from '@turnwise/cube-solver';
 import type { Move } from '@turnwise/cube-solver';
 
-cubeFromMoves([Moves.R, Moves.U, 'R_PRIME', Moves.U_PRIME]);
+cubeFromMoves([Moves.R, Moves.U, Moves.R_PRIME, Moves.U_PRIME]);
 
 const all: Move[] = Object.values(Moves); // all eighteen, for a move picker or a random scramble
 ```
@@ -704,7 +766,7 @@ TypeScript callers cannot reach these. They exist for plain JavaScript and for d
 | Importing the package | nothing: no tables are built, and unused exports can be tree-shaken away |
 | The first `solve`, or `prepare()` | about 0.3 s and 6 MB, once per thread |
 | `solve(cube)` | about 0.1 s |
-| `solve(cube, { effort: 'fast' })` | a few milliseconds |
+| `solve(cube, { effort: Efforts.fast })` | a few milliseconds |
 | Everything else, including validation | microseconds |
 
 Times are for a current laptop. They scale with the machine, but the solutions do not: see [`solve`](#solve).
