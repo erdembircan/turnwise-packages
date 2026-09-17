@@ -1,0 +1,36 @@
+{
+  "name": "@turnwise/cube-solver",
+  "version": "0.0.0",
+  "description": "Typed 3×3 Rubik's Cube solver using Kociemba's two-phase algorithm.",
+  "keywords": ["rubiks-cube", "3x3", "cube", "solver", "kociemba", "two-phase", "speedcubing", "typescript"],
+  "license": "Apache-2.0",
+  "author": "Erdem Bircan",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/erdembircan/turnwise-packages.git",
+    "directory": "packages/cube-solver"
+  },
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": ["dist"],
+  "engines": { "node": ">=22" },
+  "publishConfig": { "access": "public" },
+  "scripts": {
+    "build": "vite build",
+    "typecheck": "tsc -b"
+  },
+  "devDependencies": {
+    "@microsoft/api-extractor": "catalog:",
+    "@types/node": "catalog:",
+    "typescript": "catalog:",
+    "vite": "catalog:",
+    "vite-plugin-dts": "catalog:",
+    "vitest": "catalog:"
+  }
+}
