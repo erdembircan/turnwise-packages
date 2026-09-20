@@ -154,7 +154,7 @@ Work is counted in positions examined, not in time, so the same cube and effort 
 
 [Turnwise](https://erdembircan.github.io/turnwise/) reads a scrambled cube through a phone or laptop camera, one face at a time, and then plays the solution back on a 3D cube you turn along with. It is this package's first consumer, and the reason the package exists: the solver was lifted out of the app so the cube logic could stand on its own.
 
-It does what the section above recommends. Solving runs on a pool of Web Workers, each of which builds the tables before it reports itself ready, so no solve waits on a table build. The main thread checks the stickers first, so a misread face becomes a named error beside the camera rather than a puzzle later, and then posts the `FaceGrid` across. Open it on a phone with a cube in hand.
+It does what the section above recommends. Solving runs on a pool of Web Workers, each of which builds the tables before it reports itself ready, so no request waits on a table build. Only plain data crosses `postMessage`: the `Cube` is made on the worker's side, from stickers that survive the trip. A lint rule keeps every module outside that seam from importing this package at runtime, so the search cannot drift back onto the main thread later. Open it on a phone with a cube in hand.
 
 ## Documentation
 
