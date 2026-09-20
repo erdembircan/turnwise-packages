@@ -150,6 +150,12 @@ Work is counted in positions examined, not in time, so the same cube and effort 
 
 `solve` is synchronous and keeps its thread busy. In a browser, run it in a worker, and call `prepare()` there first so the tables are ready before the first request. Send the worker the `FaceGrid` or the moves, not the `Cube`: a `Cube` is deliberately opaque and does not survive `postMessage`. The [documentation](docs/documentation.md#performance-and-threading) has a complete worker, in a dozen lines.
 
+## The app it came from
+
+[Turnwise](https://erdembircan.github.io/turnwise/) reads a scrambled cube through a phone or laptop camera, one face at a time, and then plays the solution back on a 3D cube you turn along with. It is this package's first consumer, and the reason the package exists: the solver was lifted out of the app so the cube logic could stand on its own.
+
+It does what the section above recommends. Solving runs on a pool of Web Workers, each of which builds the tables before it reports itself ready, so no solve waits on a table build. The main thread checks the stickers first, so a misread face becomes a named error beside the camera rather than a puzzle later, and then posts the `FaceGrid` across. Open it on a phone with a cube in hand.
+
 ## Documentation
 
 **[docs/documentation.md](docs/documentation.md)** is the full reference: how to hold and read the cube, every export with its signature, what it throws and an example, every error with its fields and its exact message, and how to run the solver in a worker.

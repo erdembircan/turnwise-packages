@@ -810,4 +810,6 @@ Two things make this pattern work:
 
 Each thread that calls `solve` builds its own tables. In Node, the same pattern applies with `node:worker_threads`; a script, a command-line tool or a server job that can afford a tenth of a second per cube needs no worker at all.
 
+[Turnwise](https://erdembircan.github.io/turnwise/), the app this package came out of, works this way in the browser: a pool of workers, each building its tables before it accepts a request, with the stickers checked on the main thread first.
+
 The package is ESM only. Node 22.12 and later can also load it with `require`.
