@@ -17,7 +17,7 @@ pnpm add @turnwise/cube-solver
 
 ## See it working
 
-[Turnwise](https://erdembircan.github.io/turnwise/) is built on this package. Point a phone or laptop camera at a scrambled cube, let it read the six faces one at a time, and it plays the solution back on a 3D cube you turn along with. Open it with a cube in hand.
+[Turnwise](https://erdembircan.github.io/turnwise/) is built on this package. It reads a scrambled cube through a phone or laptop camera, one face at a time, and plays the solution back on a 3D cube you turn along with.
 
 ## Solve a cube from its stickers
 
