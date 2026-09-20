@@ -15,6 +15,10 @@ The idea that shapes the whole API: **describe the cube in types, and let the co
 pnpm add @turnwise/cube-solver
 ```
 
+## See it working
+
+[Turnwise](https://erdembircan.github.io/turnwise/) is built on this package. Point a phone or laptop camera at a scrambled cube, let it read the six faces one at a time, and it plays the solution back on a 3D cube you turn along with. Open it with a cube in hand.
+
 ## Solve a cube from its stickers
 
 Name every sticker by the face it belongs to, which is the face whose centre has the same colour. That keeps the input independent of any colour scheme. `Faces` holds the six names:
@@ -149,12 +153,6 @@ With the default effort, `Efforts.full`, a cube that is only a few moves from so
 Work is counted in positions examined, not in time, so the same cube and effort always give the same solution.
 
 `solve` is synchronous and keeps its thread busy. In a browser, run it in a worker, and call `prepare()` there first so the tables are ready before the first request. Send the worker the `FaceGrid` or the moves, not the `Cube`: a `Cube` is deliberately opaque and does not survive `postMessage`. The [documentation](docs/documentation.md#performance-and-threading) has a complete worker, in a dozen lines.
-
-## In production
-
-[Turnwise](https://erdembircan.github.io/turnwise/) is built on this package: it reads a scrambled cube through a phone or laptop camera, one face at a time, and plays the solution back on a 3D cube you turn along with. Open it on a phone with a cube in hand.
-
-It runs the package the way this page describes. Solving happens on a pool of Web Workers, each of which builds the tables before it reports itself ready, so no request waits on a table build. Only plain data crosses `postMessage`: the `Cube` is made on the worker's side, from stickers that survive the trip. A lint rule keeps every module outside that seam from importing this package at runtime, so the search cannot drift back onto the main thread later.
 
 ## Documentation
 
