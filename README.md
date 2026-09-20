@@ -13,6 +13,8 @@ Typed Rubik's Cube packages, published under the `@turnwise` npm scope.
 | --- | --- |
 | [`@turnwise/cube-solver`](packages/cube-solver) | Solves a 3×3 cube with Kociemba's two-phase algorithm. Inputs are checked by the type system before the code ever runs. |
 
+[Turnwise](https://erdembircan.github.io/turnwise/) is built on `@turnwise/cube-solver`, and the quickest way to see it work.
+
 ## Development
 
 Requires Node 24 and pnpm 10.

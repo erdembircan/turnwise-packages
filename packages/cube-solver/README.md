@@ -15,6 +15,10 @@ The idea that shapes the whole API: **describe the cube in types, and let the co
 pnpm add @turnwise/cube-solver
 ```
 
+## See it working
+
+[Turnwise](https://erdembircan.github.io/turnwise/) is built on this package. It reads a scrambled cube through a phone or laptop camera, one face at a time, and plays the solution back on a 3D cube you turn along with.
+
 ## Solve a cube from its stickers
 
 Name every sticker by the face it belongs to, which is the face whose centre has the same colour. That keeps the input independent of any colour scheme. `Faces` holds the six names:
