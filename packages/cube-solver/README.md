@@ -150,11 +150,11 @@ Work is counted in positions examined, not in time, so the same cube and effort 
 
 `solve` is synchronous and keeps its thread busy. In a browser, run it in a worker, and call `prepare()` there first so the tables are ready before the first request. Send the worker the `FaceGrid` or the moves, not the `Cube`: a `Cube` is deliberately opaque and does not survive `postMessage`. The [documentation](docs/documentation.md#performance-and-threading) has a complete worker, in a dozen lines.
 
-## The app it came from
+## In production
 
-[Turnwise](https://erdembircan.github.io/turnwise/) reads a scrambled cube through a phone or laptop camera, one face at a time, and then plays the solution back on a 3D cube you turn along with. It is this package's first consumer, and the reason the package exists: the solver was lifted out of the app so the cube logic could stand on its own.
+[Turnwise](https://erdembircan.github.io/turnwise/) is built on this package: it reads a scrambled cube through a phone or laptop camera, one face at a time, and plays the solution back on a 3D cube you turn along with. Open it on a phone with a cube in hand.
 
-It does what the section above recommends. Solving runs on a pool of Web Workers, each of which builds the tables before it reports itself ready, so no request waits on a table build. Only plain data crosses `postMessage`: the `Cube` is made on the worker's side, from stickers that survive the trip. A lint rule keeps every module outside that seam from importing this package at runtime, so the search cannot drift back onto the main thread later. Open it on a phone with a cube in hand.
+It runs the package the way this page describes. Solving happens on a pool of Web Workers, each of which builds the tables before it reports itself ready, so no request waits on a table build. Only plain data crosses `postMessage`: the `Cube` is made on the worker's side, from stickers that survive the trip. A lint rule keeps every module outside that seam from importing this package at runtime, so the search cannot drift back onto the main thread later.
 
 ## Documentation
 
