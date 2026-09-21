@@ -12,14 +12,12 @@ export {
   UnknownPieceError,
 } from './errors';
 export type { ObservedPiece } from './errors';
-export { Faces } from '@turnwise/internal';
-export type { Face } from '@turnwise/internal';
+export { Faces, Moves, faceOf, formatAlgorithm, inverse, turnsOf } from '@turnwise/internal';
+export type { Face, Move } from '@turnwise/internal';
 export { parseFaceletString } from './faceletString';
 export type { StickerLocation } from './facelets';
 export { cubeFromFaces } from './fromFaces';
 export { facesFromCube } from './grid';
 export type { FaceGrid, FaceStickers } from './grid';
-export { Moves, faceOf, formatAlgorithm, inverse, turnsOf } from './move';
-export type { Move } from './move';
 export { Efforts, prepare, solve } from './solve';
 export type { Effort, SolveOptions } from './solve';

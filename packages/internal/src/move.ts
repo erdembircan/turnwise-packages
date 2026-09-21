@@ -1,4 +1,4 @@
-import type { Face } from '@turnwise/internal';
+import type { Face } from './face';
 
 /**
  * One of the 18 face turns of a 3×3 cube.

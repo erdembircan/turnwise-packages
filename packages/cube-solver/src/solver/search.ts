@@ -1,6 +1,6 @@
 import { compose, effectOf, isSolvedState } from '../cubie';
 import type { CubieState } from '../cubie';
-import type { Move } from '../move';
+import type { Move } from '@turnwise/internal';
 import { at, read16, read8 } from '../util';
 import {
   FLIP_COUNT,

@@ -1,6 +1,5 @@
-import type { Face } from '@turnwise/internal';
-import { faceOf, turnsOf } from '../move';
-import type { Move } from '../move';
+import { faceOf, turnsOf } from '@turnwise/internal';
+import type { Face, Move } from '@turnwise/internal';
 
 /**
  * An independent model of the cube, for tests only. It knows nothing about pieces, permutations or

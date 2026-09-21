@@ -1,6 +1,6 @@
 import { stateOf } from './cube';
 import type { Cube } from './cube';
-import type { Move } from './move';
+import type { Move } from '@turnwise/internal';
 import { search } from './solver/search';
 import { getTables } from './solver/tables';
 

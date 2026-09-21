@@ -1,10 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import { applyMoves, cubeFromMoves, isSolved } from './cube';
 import type { Cube } from './cube';
-import type { Face } from '@turnwise/internal';
+import { Moves, faceOf, inverse } from '@turnwise/internal';
+import type { Face, Move } from '@turnwise/internal';
 import { cubeFromFaces } from './fromFaces';
-import { Moves, faceOf, inverse } from './move';
-import type { Move } from './move';
 import { Efforts, prepare, solve } from './solve';
 import { Efforts as EffortsFromIndex } from './index';
 import { asGrid, randomMoves } from './testing/grids';

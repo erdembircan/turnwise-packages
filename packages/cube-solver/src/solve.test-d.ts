@@ -2,8 +2,8 @@ import { expectTypeOf, it } from 'vitest';
 import { cubeFromMoves } from './cube';
 import type { Cube } from './cube';
 import { facesFromCube } from './grid';
-import { inverse } from './move';
-import type { Move } from './move';
+import { inverse } from '@turnwise/internal';
+import type { Move } from '@turnwise/internal';
 import { Efforts, prepare, solve } from './solve';
 import type { Effort, SolveOptions } from './solve';
 

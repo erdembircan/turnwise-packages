@@ -1,6 +1,5 @@
-import type { Face } from '@turnwise/internal';
-import { faceOf, turnsOf } from './move';
-import type { Move } from './move';
+import { faceOf, turnsOf } from '@turnwise/internal';
+import type { Face, Move } from '@turnwise/internal';
 import { at } from './util';
 
 /** The eight corner positions, named by the three faces they touch, in table order. */
