@@ -3,7 +3,7 @@ import { applyMoves, cubeFromMoves, isSolved } from './cube';
 import type { Cube } from './cube';
 import { facesFromCube } from './grid';
 import type { FaceGrid } from './grid';
-import type { Move } from './move';
+import type { Move } from '@turnwise/internal';
 
 function assertCube(value: Cube): Cube {
   return value;

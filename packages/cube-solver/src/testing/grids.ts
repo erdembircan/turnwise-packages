@@ -1,9 +1,8 @@
 import { cubeFromMoves } from '../cube';
-import type { Face } from '@turnwise/internal';
+import { Moves } from '@turnwise/internal';
+import type { Face, Move } from '@turnwise/internal';
 import { facesFromCube } from '../grid';
 import type { FaceGrid } from '../grid';
-import { Moves } from '../move';
-import type { Move } from '../move';
 import { at } from '../util';
 import { seededRandom } from './rng';
 

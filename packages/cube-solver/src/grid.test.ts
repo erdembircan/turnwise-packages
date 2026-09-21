@@ -1,13 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import { cubeFromMoves, stateOf } from './cube';
 import { SOLVED } from './cubie';
-import { Faces } from '@turnwise/internal';
-import type { Face } from '@turnwise/internal';
+import { Faces, Moves } from '@turnwise/internal';
+import type { Face, Move } from '@turnwise/internal';
 import { cubeFromFaces } from './fromFaces';
 import { facesFromCube, gridOf } from './grid';
 import type { FaceGrid } from './grid';
-import { Moves } from './move';
-import type { Move } from './move';
 import { randomMoves } from './testing/grids';
 import { readOracle, solvedOracle, turnOracle } from './testing/oracle';
 
