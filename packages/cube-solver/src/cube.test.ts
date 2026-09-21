@@ -2,11 +2,10 @@ import { describe, expect, it } from 'vitest';
 import { applyMoves, cubeFromMoves, isSolved } from './cube';
 import type { Cube } from './cube';
 import { facesFromCube } from './grid';
-import { Moves, inverse } from '@turnwise/internal';
+import { Moves, at, inverse } from '@turnwise/internal';
 import type { Move } from '@turnwise/internal';
 import { randomMoves } from './testing/grids';
 import { seededRandom } from './testing/rng';
-import { at } from './util';
 
 const MOVE_POOL: readonly Move[] = Object.values(Moves);
 

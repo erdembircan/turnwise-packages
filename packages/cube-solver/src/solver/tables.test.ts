@@ -1,8 +1,8 @@
 import { beforeAll, describe, expect, it } from 'vitest';
-import { compose, effectOf, SOLVED } from '../cubie';
-import type { CubieState } from '../cubie';
+import { SOLVED, at, compose, effectOf } from '@turnwise/internal';
+import type { CubieState } from '@turnwise/internal';
 import { seededRandom } from '../testing/rng';
-import { at, read8, read16 } from '../util';
+import { read8, read16 } from '../util';
 import {
   CORNERS_COUNT,
   FLIP_COUNT,

@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { applyMoves, cubeFromMoves, isSolved } from './cube';
 import type { Cube } from './cube';
-import { Moves, faceOf, inverse } from '@turnwise/internal';
+import { Moves, at, faceOf, inverse } from '@turnwise/internal';
 import type { Face, Move } from '@turnwise/internal';
 import { cubeFromFaces } from './fromFaces';
 import { Efforts, prepare, solve } from './solve';
@@ -9,7 +9,6 @@ import { Efforts as EffortsFromIndex } from './index';
 import { asGrid, randomMoves } from './testing/grids';
 import { readOracle, solvedOracle, turnOracle } from './testing/oracle';
 import { seededRandom } from './testing/rng';
-import { at } from './util';
 
 const MOVE_POOL: readonly Move[] = Object.values(Moves);
 const SOLVED_GRID = readOracle(solvedOracle());

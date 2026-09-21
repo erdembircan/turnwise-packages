@@ -9,7 +9,7 @@ import {
   StickerCountError,
   UnknownPieceError,
 } from './errors';
-import { inverse } from '@turnwise/internal';
+import { at, inverse } from '@turnwise/internal';
 import type { Face } from '@turnwise/internal';
 import { CORNER_STICKERS, EDGE_STICKERS } from './facelets';
 import { cubeFromFaces } from './fromFaces';
@@ -18,7 +18,6 @@ import type { FaceGrid } from './grid';
 import { asGrid, editable, randomMoves, solvedGrid } from './testing/grids';
 import { readOracle, solvedOracle, turnOracle } from './testing/oracle';
 import { seededRandom } from './testing/rng';
-import { at } from './util';
 
 function catchError(fn: () => unknown): unknown {
   try {

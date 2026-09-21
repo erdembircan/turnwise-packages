@@ -1,9 +1,8 @@
 import { stateOf } from './cube';
 import type { Cube } from './cube';
-import type { CubieState } from './cubie';
-import type { Face } from '@turnwise/internal';
+import { at } from '@turnwise/internal';
+import type { CubieState, Face } from '@turnwise/internal';
 import { CORNER_STICKERS, EDGE_STICKERS } from './facelets';
-import { at } from './util';
 
 /**
  * The nine stickers of one face, read row by row while looking straight at it:

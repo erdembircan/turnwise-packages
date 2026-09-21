@@ -1,7 +1,7 @@
 import { FaceletStringError } from './errors';
+import { at } from '@turnwise/internal';
 import type { Face } from '@turnwise/internal';
 import type { FaceGrid, FaceStickers } from './grid';
-import { at } from './util';
 
 const FACE_ORDER: readonly Face[] = ['U', 'R', 'F', 'D', 'L', 'B'];
 

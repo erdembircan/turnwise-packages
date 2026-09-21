@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { compose, effectOf, isSolvedState, SOLVED } from './cubie';
 import type { CubieState } from './cubie';
-import { Moves, inverse, turnsOf } from '@turnwise/internal';
-import type { Move } from '@turnwise/internal';
+import { Moves, inverse, turnsOf } from './move';
+import type { Move } from './move';
 
 const ALL_MOVES: readonly Move[] = Object.values(Moves);
 const QUARTER_TURNS: readonly Move[] = ALL_MOVES.filter((move) => turnsOf(move) === 1);

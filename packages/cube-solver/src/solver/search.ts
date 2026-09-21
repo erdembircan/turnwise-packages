@@ -1,7 +1,6 @@
-import { compose, effectOf, isSolvedState } from '../cubie';
-import type { CubieState } from '../cubie';
-import type { Move } from '@turnwise/internal';
-import { at, read16, read8 } from '../util';
+import { at, compose, effectOf, isSolvedState } from '@turnwise/internal';
+import type { CubieState, Move } from '@turnwise/internal';
+import { read16, read8 } from '../util';
 import {
   FLIP_COUNT,
   SLICE_EDGES_COUNT,

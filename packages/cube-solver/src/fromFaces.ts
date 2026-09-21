@@ -1,7 +1,7 @@
 import { makeCube } from './cube';
 import type { Cube } from './cube';
-import { CORNER_POSITIONS, EDGE_POSITIONS } from './cubie';
-import type { CornerPosition, EdgePosition } from './cubie';
+import { CORNER_POSITIONS, EDGE_POSITIONS, at } from '@turnwise/internal';
+import type { CornerPosition, EdgePosition, Face } from '@turnwise/internal';
 import {
   CornerTwistError,
   DuplicatePieceError,
@@ -11,11 +11,9 @@ import {
   UnknownPieceError,
 } from './errors';
 import type { ObservedPiece } from './errors';
-import type { Face } from '@turnwise/internal';
 import { CORNER_STICKERS, EDGE_STICKERS } from './facelets';
 import type { StickerLocation } from './facelets';
 import type { FaceGrid } from './grid';
-import { at } from './util';
 
 const FACE_ORDER: readonly Face[] = ['U', 'R', 'F', 'D', 'L', 'B'];
 

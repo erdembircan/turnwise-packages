@@ -1,6 +1,5 @@
 export { applyMoves, cubeFromMoves, isSolved } from './cube';
 export type { Cube } from './cube';
-export type { CornerPosition, EdgePosition } from './cubie';
 export {
   CornerTwistError,
   DuplicatePieceError,
@@ -13,7 +12,7 @@ export {
 } from './errors';
 export type { ObservedPiece } from './errors';
 export { Faces, Moves, faceOf, formatAlgorithm, inverse, turnsOf } from '@turnwise/internal';
-export type { Face, Move } from '@turnwise/internal';
+export type { CornerPosition, EdgePosition, Face, Move } from '@turnwise/internal';
 export { parseFaceletString } from './faceletString';
 export type { StickerLocation } from './facelets';
 export { cubeFromFaces } from './fromFaces';
