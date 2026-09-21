@@ -15,8 +15,9 @@ export default defineConfig({
   plugins: [
     dts({
       bundleTypes: true,
-      tsconfigPath: './tsconfig.src.json',
-      exclude: ['src/**/*.test.ts', 'src/**/*.test-d.ts', 'src/testing/**'],
+      // This config also compiles the shared source in packages/internal, so the published types
+      // contain it instead of importing a package that is never published.
+      tsconfigPath: './tsconfig.dts.json',
     }),
   ],
   test: {

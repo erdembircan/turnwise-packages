@@ -12,8 +12,8 @@ export {
   UnknownPieceError,
 } from './errors';
 export type { ObservedPiece } from './errors';
-export { Faces } from './face';
-export type { Face } from './face';
+export { Faces } from '@turnwise/internal';
+export type { Face } from '@turnwise/internal';
 export { parseFaceletString } from './faceletString';
 export type { StickerLocation } from './facelets';
 export { cubeFromFaces } from './fromFaces';

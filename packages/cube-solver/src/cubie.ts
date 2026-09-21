@@ -1,4 +1,4 @@
-import type { Face } from './face';
+import type { Face } from '@turnwise/internal';
 import { faceOf, turnsOf } from './move';
 import type { Move } from './move';
 import { at } from './util';

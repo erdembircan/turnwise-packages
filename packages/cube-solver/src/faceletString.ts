@@ -1,5 +1,5 @@
 import { FaceletStringError } from './errors';
-import type { Face } from './face';
+import type { Face } from '@turnwise/internal';
 import type { FaceGrid, FaceStickers } from './grid';
 import { at } from './util';
 

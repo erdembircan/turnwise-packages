@@ -1,5 +1,5 @@
 import { cubeFromMoves } from '../cube';
-import type { Face } from '../face';
+import type { Face } from '@turnwise/internal';
 import { facesFromCube } from '../grid';
 import type { FaceGrid } from '../grid';
 import { Moves } from '../move';

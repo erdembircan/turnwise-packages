@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { cubeFromMoves, stateOf } from './cube';
 import { SOLVED } from './cubie';
-import { Faces } from './face';
-import type { Face } from './face';
+import { Faces } from '@turnwise/internal';
+import type { Face } from '@turnwise/internal';
 import { cubeFromFaces } from './fromFaces';
 import { facesFromCube, gridOf } from './grid';
 import type { FaceGrid } from './grid';

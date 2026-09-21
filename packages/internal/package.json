@@ -1,0 +1,20 @@
+{
+  "name": "@turnwise/internal",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Source shared by the @turnwise packages. Never published: each package bundles what it uses.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc -b"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  }
+}

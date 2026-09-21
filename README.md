@@ -31,6 +31,8 @@ pnpm check
 
 `pnpm e2e` goes one step further: it packs the package exactly as npm would receive it, installs that tarball into a small project outside the workspace, compiles every example in the README and the documentation against the published types, checks that every export is documented, and runs the published code under plain Node.
 
+`packages/internal` holds source that more than one package uses. It is private and never published: each package bundles the parts it uses into its own build, so no published package depends on it. `pnpm e2e` fails if a published package's code or types ever refer to it.
+
 ## Releasing
 
 Releases are cut by hand, from a maintainer's machine. CI only verifies: no workflow publishes anything, and no npm credential is stored in GitHub. That is a deliberate choice, not a gap.
