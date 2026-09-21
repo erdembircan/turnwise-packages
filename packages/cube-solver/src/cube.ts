@@ -1,6 +1,5 @@
-import { compose, effectOf, isSolvedState, SOLVED } from './cubie';
-import type { CubieState } from './cubie';
-import type { Move } from '@turnwise/internal';
+import { SOLVED, compose, effectOf, isSolvedState } from '@turnwise/internal';
+import type { CubieState, Move } from '@turnwise/internal';
 
 declare const cubeBrand: unique symbol;
 

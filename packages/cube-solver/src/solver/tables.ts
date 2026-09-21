@@ -1,7 +1,6 @@
-import { effectOf } from '../cubie';
-import type { CubieState } from '../cubie';
-import type { Move } from '@turnwise/internal';
-import { at, read16, read32, read8 } from '../util';
+import { at, effectOf } from '@turnwise/internal';
+import type { CubieState, Move } from '@turnwise/internal';
+import { read16, read32, read8 } from '../util';
 import {
   CORNERS_COUNT,
   FLIP_COUNT,

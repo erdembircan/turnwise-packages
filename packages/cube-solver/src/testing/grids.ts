@@ -1,9 +1,8 @@
 import { cubeFromMoves } from '../cube';
-import { Moves } from '@turnwise/internal';
+import { Moves, at } from '@turnwise/internal';
 import type { Face, Move } from '@turnwise/internal';
 import { facesFromCube } from '../grid';
 import type { FaceGrid } from '../grid';
-import { at } from '../util';
 import { seededRandom } from './rng';
 
 const MOVE_POOL: readonly Move[] = Object.values(Moves);

@@ -1,5 +1,4 @@
-import type { CornerPosition, EdgePosition } from './cubie';
-import type { Face } from '@turnwise/internal';
+import type { CornerPosition, EdgePosition, Face } from '@turnwise/internal';
 import type { StickerLocation } from './facelets';
 
 /** The stickers found at one corner or edge position of a `FaceGrid`. */

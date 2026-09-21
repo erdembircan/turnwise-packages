@@ -1,4 +1,5 @@
-import { at, read8 } from '../util';
+import { at } from '@turnwise/internal';
+import { read8 } from '../util';
 
 /**
  * The six numbers the two-phase search works with instead of whole cubes.
