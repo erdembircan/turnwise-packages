@@ -1,7 +1,7 @@
 import { stateOf } from './cube';
 import type { Cube } from './cube';
 import type { CubieState } from './cubie';
-import type { Face } from './face';
+import type { Face } from '@turnwise/internal';
 import { CORNER_STICKERS, EDGE_STICKERS } from './facelets';
 import { at } from './util';
 

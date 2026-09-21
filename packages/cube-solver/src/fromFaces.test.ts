@@ -9,7 +9,7 @@ import {
   StickerCountError,
   UnknownPieceError,
 } from './errors';
-import type { Face } from './face';
+import type { Face } from '@turnwise/internal';
 import { CORNER_STICKERS, EDGE_STICKERS } from './facelets';
 import { cubeFromFaces } from './fromFaces';
 import { facesFromCube } from './grid';

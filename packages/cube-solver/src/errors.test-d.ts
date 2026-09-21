@@ -2,7 +2,7 @@ import { expectTypeOf, it } from 'vitest';
 import type { Cube } from './cube';
 import { InvalidCubeError, UnknownPieceError } from './errors';
 import type { FaceletStringError, ObservedPiece, StickerCountError } from './errors';
-import type { Face } from './face';
+import type { Face } from '@turnwise/internal';
 import { parseFaceletString } from './faceletString';
 import { cubeFromFaces } from './fromFaces';
 import type { FaceGrid } from './grid';

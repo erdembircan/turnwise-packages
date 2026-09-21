@@ -11,7 +11,7 @@ import {
   UnknownPieceError,
 } from './errors';
 import type { ObservedPiece } from './errors';
-import type { Face } from './face';
+import type { Face } from '@turnwise/internal';
 import { CORNER_STICKERS, EDGE_STICKERS } from './facelets';
 import type { StickerLocation } from './facelets';
 import type { FaceGrid } from './grid';

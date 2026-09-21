@@ -1,6 +1,6 @@
 import { expectTypeOf, it } from 'vitest';
 import { Moves, faceOf, formatAlgorithm, inverse, turnsOf, type Move } from './move';
-import type { Face } from './face';
+import type { Face } from '@turnwise/internal';
 
 it('types Move as the union of all 18 moves', () => {
   expectTypeOf<Move>().toEqualTypeOf<

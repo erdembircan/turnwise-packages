@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { applyMoves, cubeFromMoves, isSolved } from './cube';
 import type { Cube } from './cube';
-import type { Face } from './face';
+import type { Face } from '@turnwise/internal';
 import { cubeFromFaces } from './fromFaces';
 import { Moves, faceOf, inverse } from './move';
 import type { Move } from './move';
