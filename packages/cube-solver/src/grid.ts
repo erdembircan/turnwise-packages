@@ -1,5 +1,6 @@
 import { stateOf } from './cube';
 import type { Cube } from './cube';
+import type { CubieState } from './cubie';
 import type { Face } from './face';
 import { CORNER_STICKERS, EDGE_STICKERS } from './facelets';
 import { at } from './util';
@@ -51,9 +52,11 @@ function faceStickers<Centre extends Face>(
   ];
 }
 
-/** The stickers of `cube`, for drawing it or for sending it somewhere a `Cube` cannot go. */
-export function facesFromCube(cube: Cube): FaceGrid {
-  const state = stateOf(cube);
+/**
+ * The stickers of the cube whose pieces sit as `state` describes. It reads nothing but `state`, so
+ * code that holds a piece state without a `Cube` can draw it too.
+ */
+export function gridOf(state: CubieState): FaceGrid {
   const cells: Readonly<Record<Face, Face[]>> = { U: [], R: [], F: [], D: [], L: [], B: [] };
 
   for (let position = 0; position < 8; position++) {
@@ -82,4 +85,9 @@ export function facesFromCube(cube: Cube): FaceGrid {
     L: faceStickers('L', cells.L),
     B: faceStickers('B', cells.B),
   };
+}
+
+/** The stickers of `cube`, for drawing it or for sending it somewhere a `Cube` cannot go. */
+export function facesFromCube(cube: Cube): FaceGrid {
+  return gridOf(stateOf(cube));
 }

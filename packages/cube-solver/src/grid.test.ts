@@ -1,8 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { cubeFromMoves } from './cube';
+import { cubeFromMoves, stateOf } from './cube';
+import { SOLVED } from './cubie';
 import { Faces } from './face';
 import type { Face } from './face';
-import { facesFromCube } from './grid';
+import { cubeFromFaces } from './fromFaces';
+import { facesFromCube, gridOf } from './grid';
 import type { FaceGrid } from './grid';
 import { Moves } from './move';
 import type { Move } from './move';
@@ -71,5 +73,18 @@ describe('facesFromCube', () => {
     const grid = facesFromCube(cubeFromMoves(['R']));
     expect([grid.F[2], grid.F[5], grid.F[8]]).toEqual(['D', 'D', 'D']);
     expect([grid.U[2], grid.U[5], grid.U[8]]).toEqual(['F', 'F', 'F']);
+  });
+});
+
+describe('gridOf', () => {
+  it('draws the solved state as the solved cube', () => {
+    expect(gridOf(SOLVED)).toEqual(facesFromCube(cubeFromMoves([])));
+  });
+
+  it('is undone exactly by cubeFromFaces for 300 seeded random sequences', () => {
+    for (let seed = 1; seed <= 300; seed++) {
+      const state = stateOf(cubeFromMoves(randomMoves(seed)));
+      expect(stateOf(cubeFromFaces(gridOf(state))), `seed ${String(seed)}`).toEqual(state);
+    }
   });
 });
