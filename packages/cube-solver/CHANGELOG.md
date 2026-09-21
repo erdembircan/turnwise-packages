@@ -7,6 +7,8 @@ and this package adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-09-21
+
 ### Added
 
 - `solve`: Kociemba's two-phase algorithm for the 3×3 cube. The default effort returns about 20 moves in about a tenth of a second; `effort: Efforts.fast` returns about 23 moves in a few milliseconds. The same cube and effort always give the same solution.
