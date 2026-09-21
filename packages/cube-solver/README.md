@@ -5,6 +5,12 @@
   </picture>
 </p>
 
+<p align="center">
+  <a href="https://www.npmjs.com/package/@turnwise/cube-solver"><img alt="npm version" src="https://img.shields.io/npm/v/@turnwise/cube-solver"></a>
+  <a href="https://github.com/erdembircan/turnwise-packages/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/erdembircan/turnwise-packages/actions/workflows/ci.yml/badge.svg?branch=main"></a>
+  <a href="https://github.com/erdembircan/turnwise-packages/blob/main/LICENSE"><img alt="License" src="https://img.shields.io/npm/l/@turnwise/cube-solver"></a>
+</p>
+
 # @turnwise/cube-solver
 
 Solves a 3×3 Rubik's Cube with Kociemba's two-phase algorithm. Written in TypeScript, with no dependencies, for browsers, workers, Node, Deno and Bun.
