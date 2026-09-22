@@ -4,6 +4,7 @@ export {
   SOLVED,
   compose,
   effectOf,
+  isOddPermutation,
   isSolvedState,
 } from './cubie';
 export type { CornerPosition, CubieState, EdgePosition } from './cubie';
