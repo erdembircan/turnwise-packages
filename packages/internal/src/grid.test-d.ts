@@ -1,5 +1,5 @@
 import { expectTypeOf, it } from 'vitest';
-import type { Face } from '@turnwise/internal';
+import type { Face } from './face';
 import type { FaceGrid } from './grid';
 
 function assertGrid(value: FaceGrid): FaceGrid {

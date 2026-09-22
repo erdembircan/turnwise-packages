@@ -2,10 +2,9 @@ import { expectTypeOf, it } from 'vitest';
 import type { Cube } from './cube';
 import { InvalidCubeError, UnknownPieceError } from './errors';
 import type { FaceletStringError, ObservedPiece, StickerCountError } from './errors';
-import type { Face } from '@turnwise/internal';
+import type { Face, FaceGrid } from '@turnwise/internal';
 import { parseFaceletString } from './faceletString';
 import { cubeFromFaces } from './fromFaces';
-import type { FaceGrid } from './grid';
 
 it('types cubeFromFaces as (grid: FaceGrid) => Cube', () => {
   expectTypeOf(cubeFromFaces).parameter(0).toEqualTypeOf<FaceGrid>();

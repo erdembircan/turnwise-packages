@@ -1,5 +1,4 @@
-import type { CornerPosition, EdgePosition, Face } from '@turnwise/internal';
-import type { StickerLocation } from './facelets';
+import type { CornerPosition, EdgePosition, Face, StickerLocation } from '@turnwise/internal';
 
 /** The stickers found at one corner or edge position of a `FaceGrid`. */
 export interface ObservedPiece {

@@ -1,4 +1,4 @@
-import type { Face } from '@turnwise/internal';
+import type { Face } from './face';
 
 /** One sticker's place on the cube: a face, and a position 0..8 on it, read row by row. */
 export interface StickerLocation {

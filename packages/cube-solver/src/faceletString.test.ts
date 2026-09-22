@@ -4,7 +4,7 @@ import { FaceletStringError, InvalidCubeError } from './errors';
 import { parseFaceletString } from './faceletString';
 import { cubeFromFaces } from './fromFaces';
 import { facesFromCube } from './grid';
-import type { FaceGrid } from './grid';
+import type { FaceGrid } from '@turnwise/internal';
 import { randomMoves, solvedGrid } from './testing/grids';
 
 const SOLVED_STRING = 'UUUUUUUUURRRRRRRRRFFFFFFFFFDDDDDDDDDLLLLLLLLLBBBBBBBBB';
