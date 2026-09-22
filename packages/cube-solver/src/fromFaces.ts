@@ -6,6 +6,7 @@ import {
   EDGE_POSITIONS,
   EDGE_STICKERS,
   at,
+  isOddPermutation,
 } from '@turnwise/internal';
 import type {
   CornerPosition,
@@ -140,20 +141,6 @@ function resolve(faces: FaceGrid, layer: Layer): Resolved {
   }
 
   return { pieces, orientations: matches.map((match) => match?.orientation ?? 0) };
-}
-
-function isOddPermutation(permutation: readonly number[]): boolean {
-  const seen = permutation.map(() => false);
-  let odd = false;
-  for (let start = 0; start < permutation.length; start++) {
-    let length = 0;
-    for (let index = start; seen[index] === false; index = at(permutation, index)) {
-      seen[index] = true;
-      length += 1;
-    }
-    if (length > 0 && length % 2 === 0) odd = !odd;
-  }
-  return odd;
 }
 
 function sum(values: readonly number[]): number {

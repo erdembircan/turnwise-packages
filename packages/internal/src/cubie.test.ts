@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { compose, effectOf, isSolvedState, SOLVED } from './cubie';
+import { compose, effectOf, isOddPermutation, isSolvedState, SOLVED } from './cubie';
 import type { CubieState } from './cubie';
 import { Moves, inverse, turnsOf } from './move';
 import type { Move } from './move';
@@ -75,5 +75,23 @@ describe('isSolvedState', () => {
     for (const move of ALL_MOVES) {
       expect(isSolvedState(compose(SOLVED, effectOf(move)))).toBe(false);
     }
+  });
+});
+
+describe('isOddPermutation', () => {
+  it('is false for the identity', () => {
+    expect(isOddPermutation([0, 1, 2, 3])).toBe(false);
+  });
+
+  it('is true for a single swap', () => {
+    expect(isOddPermutation([1, 0, 2, 3])).toBe(true);
+  });
+
+  it('is false for a three-cycle', () => {
+    expect(isOddPermutation([1, 2, 0, 3])).toBe(false);
+  });
+
+  it('is true for a four-cycle', () => {
+    expect(isOddPermutation([1, 2, 3, 0])).toBe(true);
   });
 });

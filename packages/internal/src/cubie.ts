@@ -138,3 +138,18 @@ export function isSolvedState(state: CubieState): boolean {
     state.eo.every((flip) => flip === 0)
   );
 }
+
+/** Whether `permutation` is odd: built from the identity by an odd number of swaps. */
+export function isOddPermutation(permutation: readonly number[]): boolean {
+  const seen = permutation.map(() => false);
+  let odd = false;
+  for (let start = 0; start < permutation.length; start++) {
+    let length = 0;
+    for (let index = start; seen[index] === false; index = at(permutation, index)) {
+      seen[index] = true;
+      length += 1;
+    }
+    if (length > 0 && length % 2 === 0) odd = !odd;
+  }
+  return odd;
+}
