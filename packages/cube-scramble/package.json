@@ -1,0 +1,48 @@
+{
+  "name": "@turnwise/cube-scramble",
+  "version": "1.0.0",
+  "description": "WCA-style random-state scrambles for the 3×3 Rubik's Cube, built on @turnwise/cube-solver.",
+  "keywords": ["rubiks-cube", "3x3", "cube", "scramble", "random-state", "wca", "speedcubing", "typescript"],
+  "license": "Apache-2.0",
+  "author": "Erdem Bircan",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/erdembircan/turnwise-packages.git",
+    "directory": "packages/cube-scramble"
+  },
+  "homepage": "https://github.com/erdembircan/turnwise-packages/tree/main/packages/cube-scramble#readme",
+  "bugs": "https://github.com/erdembircan/turnwise-packages/issues",
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": ["dist", "CHANGELOG.md"],
+  "engines": { "node": ">=22" },
+  "publishConfig": { "access": "public" },
+  "scripts": {
+    "build": "vite build",
+    "typecheck": "tsc -b",
+    "prepublishOnly": "pnpm --workspace-root check",
+    "prepack": "cp ../../LICENSE LICENSE",
+    "postpack": "rm LICENSE",
+    "check:package": "publint --strict && attw --pack . --profile esm-only"
+  },
+  "dependencies": {
+    "@turnwise/cube-solver": "workspace:^"
+  },
+  "devDependencies": {
+    "@arethetypeswrong/cli": "catalog:",
+    "@microsoft/api-extractor": "catalog:",
+    "@turnwise/internal": "workspace:*",
+    "@types/node": "catalog:",
+    "publint": "catalog:",
+    "typescript": "catalog:",
+    "vite": "catalog:",
+    "vite-plugin-dts": "catalog:",
+    "vitest": "catalog:"
+  }
+}
