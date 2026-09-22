@@ -1,3 +1,4 @@
+import { defaultServerConditions } from 'vite';
 import { defineConfig } from 'vitest/config';
 import dts from 'vite-plugin-dts';
 
@@ -26,6 +27,13 @@ export default defineConfig({
       tsconfigPath: './tsconfig.dts.json',
     }),
   ],
+  // Inside the workspace, tests read the solver's source rather than its build, so they never run
+  // against a stale or missing dist/.
+  ssr: {
+    resolve: {
+      conditions: ['@turnwise/source', ...defaultServerConditions],
+    },
+  },
   test: {
     include: ['src/**/*.test.ts'],
     typecheck: {

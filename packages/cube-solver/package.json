@@ -16,13 +16,22 @@
   "sideEffects": false,
   "exports": {
     ".": {
+      "@turnwise/source": "./src/index.ts",
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
     }
   },
   "files": ["dist", "docs", "CHANGELOG.md"],
   "engines": { "node": ">=22" },
-  "publishConfig": { "access": "public" },
+  "publishConfig": {
+    "access": "public",
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
+    }
+  },
   "scripts": {
     "build": "vite build",
     "typecheck": "tsc -b",
