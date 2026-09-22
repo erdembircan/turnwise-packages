@@ -93,6 +93,40 @@ importers:
         specifier: 'catalog:'
         version: 5.0.1(@types/node@24.13.5)(vite@8.3.0(@types/node@24.13.5)(yaml@2.9.1))
 
+  packages/cube-scramble:
+    dependencies:
+      '@turnwise/cube-solver':
+        specifier: workspace:^
+        version: link:../cube-solver
+    devDependencies:
+      '@arethetypeswrong/cli':
+        specifier: 'catalog:'
+        version: 0.18.5
+      '@microsoft/api-extractor':
+        specifier: 'catalog:'
+        version: 7.59.1(@types/node@24.13.5)
+      '@turnwise/internal':
+        specifier: workspace:*
+        version: link:../internal
+      '@types/node':
+        specifier: 'catalog:'
+        version: 24.13.5
+      publint:
+        specifier: 'catalog:'
+        version: 0.3.24
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+      vite:
+        specifier: 'catalog:'
+        version: 8.3.0(@types/node@24.13.5)(yaml@2.9.1)
+      vite-plugin-dts:
+        specifier: 'catalog:'
+        version: 5.1.0(@microsoft/api-extractor@7.59.1(@types/node@24.13.5))(rolldown@1.2.9)(typescript@6.0.3)(vite@8.3.0(@types/node@24.13.5)(yaml@2.9.1))
+      vitest:
+        specifier: 'catalog:'
+        version: 5.0.1(@types/node@24.13.5)(vite@8.3.0(@types/node@24.13.5)(yaml@2.9.1))
+
   packages/cube-solver:
     devDependencies:
       '@arethetypeswrong/cli':

@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.src.json",
+  "compilerOptions": {
+    "composite": false,
+    "rootDir": "..",
+    "paths": { "@turnwise/internal": ["../internal/src/index.ts"] }
+  },
+  "include": ["src", "../internal/src"],
+  "exclude": ["**/*.test.ts", "**/*.test-d.ts", "src/testing"]
+}
