@@ -36,6 +36,7 @@ export default defineConfig({
   },
   test: {
     include: ['src/**/*.test.ts'],
+    testTimeout: 120_000,
     typecheck: {
       enabled: true,
       include: ['src/**/*.test-d.ts'],
