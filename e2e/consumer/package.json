@@ -3,9 +3,15 @@
   "private": true,
   "type": "module",
   "dependencies": {
+    "@turnwise/cube-scramble": "file:../.pack/cube-scramble.tgz",
     "@turnwise/cube-solver": "file:../.pack/cube-solver.tgz"
   },
   "devDependencies": {
     "typescript": "^6.0.3"
+  },
+  "pnpm": {
+    "overrides": {
+      "@turnwise/cube-solver": "file:../.pack/cube-solver.tgz"
+    }
   }
 }

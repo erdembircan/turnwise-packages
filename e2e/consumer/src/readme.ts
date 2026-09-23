@@ -1,4 +1,4 @@
-// Every example in the package README, in order, compiled against the published types. If the
+// Every example in the cube-solver README, in order, compiled against the published types. If the
 // README changes, change this file with it.
 import {
   Efforts,
