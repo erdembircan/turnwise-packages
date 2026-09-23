@@ -27,8 +27,6 @@ The WCA Regulations say what a fair scramble is, and this package follows them:
 - **Regulation 4b3:** a scramble leads to a random position, and every position that needs at least two moves to solve is equally likely. The package draws the position first, uniformly from every legal position, and only then works out the moves that reach it. A draw that lands on a solved position, or on one of the eighteen positions one move from solved, is thrown away and drawn again; that happens about once in two quintillion draws.
 - **Regulation 4b1:** scrambles are not picked or filtered. The package has no option that chooses easier, shorter or otherwise preferred scrambles, and it never redraws for any reason except the one above.
 
-Regulation 4b also requires official competitions to use the WCA's own scramble program. This package follows the same rules, but it is not that program.
-
 ### Where the randomness comes from
 
 By default every draw uses the platform's cryptographically secure generator, `crypto.getRandomValues`, which browsers have and Node has had as a global since version 19. It reaches every position, and nobody can predict a scramble from the ones before it.

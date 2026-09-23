@@ -17,8 +17,6 @@ WCA-style scrambles for the 3×3 Rubik's Cube, written in TypeScript, for browse
 
 Each scramble leads to a random position, and every position that needs at least two moves to solve is equally likely, as WCA Regulation 4b3 asks. The randomness comes from the platform's cryptographically secure generator. The moves come from [`@turnwise/cube-solver`](https://www.npmjs.com/package/@turnwise/cube-solver), which is installed with it.
 
-It follows the WCA's rules for scrambles, but it is not the WCA's official scramble program, which official competitions must use.
-
 ```bash
 pnpm add @turnwise/cube-scramble
 ```
