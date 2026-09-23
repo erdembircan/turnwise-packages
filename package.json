@@ -18,7 +18,7 @@
     "license:verify": "license-wizard --verify --strict",
     "check:package": "pnpm -r check:package",
     "check": "pnpm typecheck && pnpm lint && pnpm test && pnpm build && pnpm check:package && pnpm license:verify",
-    "e2e": "pnpm build && pnpm --filter @turnwise/cube-solver pack --out \"$PWD/e2e/.pack/cube-solver.tgz\" && cd e2e/consumer && pnpm install --ignore-workspace && node check-docs.mjs && pnpm exec tsc -p tsconfig.json && pnpm exec tsc -p tsconfig.nodenext.json && node run.mjs && node require.cjs"
+    "e2e": "pnpm build && pnpm --filter @turnwise/cube-solver pack --out \"$PWD/e2e/.pack/cube-solver.tgz\" && pnpm --filter @turnwise/cube-scramble pack --out \"$PWD/e2e/.pack/cube-scramble.tgz\" && cd e2e/consumer && pnpm install --ignore-workspace && node check-docs.mjs && pnpm exec tsc -p tsconfig.json && pnpm exec tsc -p tsconfig.nodenext.json && node run.mjs && node scramble.mjs && node require.cjs"
   },
   "devDependencies": {
     "@eslint/js": "catalog:",
