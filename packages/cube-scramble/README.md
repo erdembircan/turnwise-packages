@@ -15,7 +15,7 @@
 
 WCA-style scrambles for the 3×3 Rubik's Cube, written in TypeScript, for browsers, workers, Node, Deno and Bun.
 
-Each scramble leads to a random position, and every position that needs at least two moves to solve is equally likely, as WCA Regulation 4b3 asks. The randomness comes from the platform's cryptographically secure generator. The moves come from [`@turnwise/cube-solver`](https://www.npmjs.com/package/@turnwise/cube-solver), which is installed with it.
+Each scramble leads to a random position, and every position that needs at least two moves to solve is equally likely, as WCA Regulation 4b3 asks. The randomness comes from the platform's cryptographically secure generator.
 
 ```bash
 pnpm add @turnwise/cube-scramble
@@ -35,7 +35,7 @@ formatAlgorithm(moves);
 
 Apply it to a solved cube held white on top and green in front, as WCA Regulation 4d1 describes. In the package's terms that is the U face up and the F face towards you: the moves name faces, not colours.
 
-A scramble is an array of the solver's `Move` values, the plain strings `'R2'`, `'U_PRIME'` and so on, so it survives JSON, `postMessage` and a database unchanged. `formatAlgorithm` turns it into the traditional notation people read and other cube programs accept.
+A scramble is an array of `Move` values, the plain strings `'R2'`, `'U_PRIME'` and so on, so it survives JSON, `postMessage` and a database unchanged. `formatAlgorithm` turns it into the traditional notation people read and other cube programs accept.
 
 ## What you get
 
@@ -87,9 +87,7 @@ Use this for tests, replays and shared practice sets, not for fairness. A genera
 | `scramble()` | about 0.1 s | about 0.17 s |
 | `scramble({ effort: Efforts.fast })` | a few milliseconds | under 10 ms |
 
-`scramble` is synchronous and keeps its thread busy. In a browser, run it in a worker, and call `prepare()` there first so the first scramble does not pay for the solver's lookup tables. The [documentation](docs/documentation.md#performance-and-threading) has a complete worker.
-
-`prepare`, `formatAlgorithm`, `Efforts` and the types `Move` and `Effort` are the solver's own, re-exported so that this package is all you need to import. If your app also uses `@turnwise/cube-solver` directly, both packages share one copy of it, and one call to `prepare()` builds the tables for both.
+`scramble` is synchronous and keeps its thread busy. In a browser, run it in a worker, and call `prepare()` there first so the first scramble does not pay for building its lookup tables. The [documentation](docs/documentation.md#performance-and-threading) has a complete worker.
 
 ## When something is wrong
 
@@ -107,7 +105,7 @@ It ships inside the package, at `node_modules/@turnwise/cube-scramble/docs/docum
 | Task | Exports |
 | --- | --- |
 | Scramble | `scramble`, `ScrambleOptions` |
-| Re-exported from the solver | `formatAlgorithm`, `prepare`, `Efforts`, `Effort`, `Move` |
+| Moves and setup | `formatAlgorithm`, `prepare`, `Efforts`, `Effort`, `Move` |
 
 The package is ESM only. Node 22.12 and later can also load it with `require`.
 
