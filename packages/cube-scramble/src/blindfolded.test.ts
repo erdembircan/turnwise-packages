@@ -9,6 +9,7 @@ import { drawOrientation } from './orientation';
 import { drawScrambleState } from './randomState';
 import { scramble } from './scramble';
 import { seededRandom } from './testing/rng';
+import { turnedFaces } from './turnedFaces';
 
 const isMove = (move: Move | WideMove): move is Move => Object.hasOwn(Moves, move);
 const isWideMove = (move: Move | WideMove): move is WideMove => !isMove(move);
@@ -23,7 +24,7 @@ function axisOf(move: Move | WideMove): string {
 describe('blindfoldedScramble', () => {
   it('draws the position, then the orientation, from one random stream', () => {
     for (let seed = 1; seed <= 20; seed++) {
-      const moves = blindfoldedScramble({ random: seededRandom(seed), effort: Efforts.fast });
+      const { moves } = blindfoldedScramble({ random: seededRandom(seed), effort: Efforts.fast });
       const random = seededRandom(seed);
       const drawn = drawScrambleState(random);
       const orientation = drawOrientation(random);
@@ -35,7 +36,16 @@ describe('blindfoldedScramble', () => {
     }
   });
 
-  it('gives the same moves for the same seed, and different moves for another seed', () => {
+  it('returns the cube as held after the wide moves as its faces', () => {
+    for (let seed = 1; seed <= 20; seed++) {
+      const { faces } = blindfoldedScramble({ random: seededRandom(seed), effort: Efforts.fast });
+      const random = seededRandom(seed);
+      const drawn = drawScrambleState(random);
+      expect(faces, `seed ${String(seed)}`).toEqual(turnedFaces(drawn, drawOrientation(random)));
+    }
+  });
+
+  it('gives the same scramble for the same seed, and a different one for another seed', () => {
     const first = blindfoldedScramble({ random: seededRandom(7), effort: Efforts.fast });
     expect(blindfoldedScramble({ random: seededRandom(7), effort: Efforts.fast })).toEqual(first);
     expect(blindfoldedScramble({ random: seededRandom(8), effort: Efforts.fast })).not.toEqual(
@@ -46,7 +56,7 @@ describe('blindfoldedScramble', () => {
   it('never ends its face turns on the axis of the first wide move', () => {
     let reworked = 0;
     for (let seed = 1; seed <= 500; seed++) {
-      const moves = blindfoldedScramble({ random: seededRandom(seed), effort: Efforts.fast });
+      const { moves } = blindfoldedScramble({ random: seededRandom(seed), effort: Efforts.fast });
       const faceTurns = moves.filter(isMove);
       const random = seededRandom(seed);
       const drawn = drawScrambleState(random);
@@ -63,7 +73,7 @@ describe('blindfoldedScramble', () => {
       expect(axisOf(at(faceTurns, faceTurns.length - 1)), `seed ${String(seed)}`).not.toBe(
         axisOf(firstWide),
       );
-      const plain = scramble({ random: seededRandom(seed), effort: Efforts.fast });
+      const plain = scramble({ random: seededRandom(seed), effort: Efforts.fast }).moves;
       if (JSON.stringify(faceTurns) !== JSON.stringify(plain)) reworked += 1;
     }
     expect(reworked, 'some seeds must need a new last turn').toBeGreaterThan(0);

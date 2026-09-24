@@ -1,5 +1,5 @@
 import { cubeFromFaces, cubeFromMoves, faceOf, inverse } from '@turnwise/cube-solver';
-import type { Effort, Face, Move } from '@turnwise/cube-solver';
+import type { Effort, Face, FaceStickers, Move } from '@turnwise/cube-solver';
 import { gridOf } from '@turnwise/internal';
 import type { WideMove } from './notation';
 import { drawOrientation } from './orientation';
@@ -7,6 +7,7 @@ import { drawScrambleState } from './randomState';
 import { scrambleOf } from './scramble';
 import type { ScrambleOptions } from './scramble';
 import { secureRandom } from './secureRandom';
+import { turnedFaces } from './turnedFaces';
 
 type Axis = 'UD' | 'RL' | 'FB';
 
@@ -58,18 +59,35 @@ function endingOffAxis(moves: Move[], axis: Axis, effort: Effort | undefined): M
   return moves;
 }
 
+/** A blindfolded scramble, and the cube it leaves. */
+export interface BlindfoldedScramble {
+  /**
+   * The face turns, then up to two wide moves, for a solved cube held white on top and green in
+   * front.
+   */
+  readonly moves: (Move | WideMove)[];
+  /**
+   * The cube after the moves, as it is then held: every sticker, named by the face it belonged to
+   * when solved. The wide moves turn the whole cube, so the centres show its orientation.
+   */
+  readonly faces: Readonly<Record<Face, FaceStickers>>;
+}
+
 /**
- * Moves that take a solved cube, held white on top and green in front, to a random state in a
- * random orientation: a scramble drawn as `scramble` draws it, then the wide moves that turn the
- * cube to one of its 24 orientations, each equally likely, as WCA Regulation 4b3a requires for
- * blindfolded events.
+ * A random state in a random orientation, with the moves that reach it: a scramble drawn as
+ * `scramble` draws it, then the wide moves that turn the cube to one of its 24 orientations, each
+ * equally likely, as WCA Regulation 4b3a requires for blindfolded events.
  */
-export function blindfoldedScramble(options: ScrambleOptions = {}): (Move | WideMove)[] {
+export function blindfoldedScramble(options: ScrambleOptions = {}): BlindfoldedScramble {
   const random = options.random ?? secureRandom;
   const state = drawScrambleState(random);
   const orientation = drawOrientation(random);
+  const faces = turnedFaces(state, orientation);
   const moves = scrambleOf(cubeFromFaces(gridOf(state)), options.effort);
   const first = orientation[0];
-  if (first === undefined) return moves;
-  return [...endingOffAxis(moves, WIDE_AXIS[first], options.effort), ...orientation];
+  if (first === undefined) return { moves, faces };
+  return {
+    moves: [...endingOffAxis(moves, WIDE_AXIS[first], options.effort), ...orientation],
+    faces,
+  };
 }

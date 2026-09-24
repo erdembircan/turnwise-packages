@@ -9,23 +9,23 @@ import { secureRandom } from './secureRandom';
 import { seededRandom } from './testing/rng';
 
 describe('scramble', () => {
-  it('gives the same moves for the same seed, and different moves for another seed', () => {
+  it('gives the same scramble for the same seed, and a different one for another seed', () => {
     const first = scramble({ random: seededRandom(7), effort: Efforts.fast });
     expect(scramble({ random: seededRandom(7), effort: Efforts.fast })).toEqual(first);
     expect(scramble({ random: seededRandom(8), effort: Efforts.fast })).not.toEqual(first);
   });
 
-  it('takes a solved cube exactly to the state drawn from the same seed', () => {
+  it('returns the state drawn from the same seed as its faces, and moves that reach it', () => {
     for (let seed = 1; seed <= 20; seed++) {
-      const moves = scramble({ random: seededRandom(seed), effort: Efforts.fast });
-      const drawn = drawScrambleState(seededRandom(seed));
-      expect(facesFromCube(cubeFromMoves(moves)), `seed ${String(seed)}`).toEqual(gridOf(drawn));
+      const { moves, faces } = scramble({ random: seededRandom(seed), effort: Efforts.fast });
+      expect(faces, `seed ${String(seed)}`).toEqual(gridOf(drawScrambleState(seededRandom(seed))));
+      expect(facesFromCube(cubeFromMoves(moves)), `seed ${String(seed)}`).toEqual(faces);
     }
   });
 
   it('works at both efforts, and every scramble is undone by solving it', () => {
     for (const effort of [Efforts.fast, Efforts.full]) {
-      const moves = scramble({ random: seededRandom(11), effort });
+      const { moves } = scramble({ random: seededRandom(11), effort });
       expect(moves.length).toBeGreaterThanOrEqual(2);
       const scrambled = cubeFromMoves(moves);
       expect(isSolved(applyMoves(scrambled, solver.solve(scrambled)))).toBe(true);
@@ -41,7 +41,7 @@ describe('scramble', () => {
   it('draws from the secure generator when no random function is given', () => {
     const first = scramble({ effort: Efforts.fast });
     const second = scramble({ effort: Efforts.fast });
-    expect(first.length).toBeGreaterThanOrEqual(2);
+    expect(first.moves.length).toBeGreaterThanOrEqual(2);
     expect(second).not.toEqual(first);
   });
 
