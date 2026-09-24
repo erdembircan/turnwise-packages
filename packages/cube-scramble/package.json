@@ -2,7 +2,7 @@
   "name": "@turnwise/cube-scramble",
   "version": "1.0.0",
   "description": "WCA-style random-state scrambles for the 3×3 Rubik's Cube.",
-  "keywords": ["rubiks-cube", "3x3", "cube", "scramble", "random-state", "wca", "speedcubing", "typescript"],
+  "keywords": ["rubiks-cube", "3x3", "cube", "scramble", "random-state", "wca", "blindfolded", "speedcubing", "typescript"],
   "license": "Apache-2.0",
   "author": "Erdem Bircan",
   "repository": {

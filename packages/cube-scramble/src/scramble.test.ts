@@ -60,8 +60,17 @@ describe('secureRandom', () => {
 });
 
 describe('the package entry', () => {
+  it('exports exactly the public values', () => {
+    expect(Object.keys(api).sort()).toEqual([
+      'Efforts',
+      'blindfoldedScramble',
+      'formatScramble',
+      'prepare',
+      'scramble',
+    ]);
+  });
+
   it("re-exports the solver's own bindings, not copies", () => {
-    expect(api.formatAlgorithm).toBe(solver.formatAlgorithm);
     expect(api.Efforts).toBe(solver.Efforts);
     expect(api.prepare).toBe(solver.prepare);
   });

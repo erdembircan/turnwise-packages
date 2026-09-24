@@ -12,7 +12,7 @@ Typed Rubik's Cube packages, published under the `@turnwise` npm scope.
 | Package | What it does |
 | --- | --- |
 | [`@turnwise/cube-solver`](packages/cube-solver) | Solves a 3×3 cube with Kociemba's two-phase algorithm. Inputs are checked by the type system before the code ever runs. |
-| [`@turnwise/cube-scramble`](packages/cube-scramble) | WCA-style scrambles for the 3×3 cube: every position that needs at least two moves to solve is equally likely. Built on the solver. |
+| [`@turnwise/cube-scramble`](packages/cube-scramble) | WCA-style scrambles for the 3×3 cube: every position that needs at least two moves to solve is equally likely, and blindfolded scrambles also leave the cube in a random orientation. |
 
 [Turnwise](https://erdembircan.github.io/turnwise/) is built on `@turnwise/cube-solver`, and the quickest way to see it work.
 
