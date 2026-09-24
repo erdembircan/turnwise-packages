@@ -1,11 +1,15 @@
 // Every example in the cube-scramble README, in order, compiled against the published types. If the
 // README changes, change this file with it.
-import { Efforts, formatAlgorithm, scramble } from '@turnwise/cube-scramble';
-import type { Move } from '@turnwise/cube-scramble';
+import { Efforts, blindfoldedScramble, formatScramble, scramble } from '@turnwise/cube-scramble';
+import type { Move, WideMove } from '@turnwise/cube-scramble';
 
 // Get a scramble
 const moves: Move[] = scramble();
-export const notation: string = formatAlgorithm(moves);
+export const notation: string = formatScramble(moves);
+
+// Blindfolded scrambles
+const blindfolded: (Move | WideMove)[] = blindfoldedScramble();
+export const blindfoldedNotation: string = formatScramble(blindfolded);
 
 // What you get
 export const quick: Move[] = scramble({ effort: Efforts.fast });
@@ -22,4 +26,4 @@ function seeded(seed: number): () => number {
   };
 }
 
-export const repeatable: string = formatAlgorithm(scramble({ random: seeded(42) }));
+export const repeatable: string = formatScramble(scramble({ random: seeded(42) }));
