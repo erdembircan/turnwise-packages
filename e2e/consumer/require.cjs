@@ -11,8 +11,8 @@ console.log('require() works for the solver:', solution.join(' '));
 if (scrambler.prepare !== solver.prepare) {
   throw new Error('require() loaded a second copy of the solver');
 }
-const moves = scrambler.blindfoldedScramble({ effort: scrambler.Efforts.fast });
-if (moves.length < 2) {
-  throw new Error(`unexpected scramble: ${JSON.stringify(moves)}`);
+const { moves, faces } = scrambler.blindfoldedScramble({ effort: scrambler.Efforts.fast });
+if (moves.length < 2 || faces.U.length !== 9) {
+  throw new Error(`unexpected scramble: ${JSON.stringify({ moves, faces })}`);
 }
 console.log('require() works for the scrambler:', scrambler.formatScramble(moves));

@@ -1,18 +1,24 @@
 // Every example in the cube-scramble README, in order, compiled against the published types. If the
 // README changes, change this file with it.
 import { Efforts, blindfoldedScramble, formatScramble, scramble } from '@turnwise/cube-scramble';
-import type { Move, WideMove } from '@turnwise/cube-scramble';
+import type { Face, FaceGrid, FaceStickers, Move, WideMove } from '@turnwise/cube-scramble';
 
 // Get a scramble
-const moves: Move[] = scramble();
+const { moves, faces } = scramble();
 export const notation: string = formatScramble(moves);
+export const top: FaceGrid['U'] = faces.U;
+export const plainMoves: Move[] = moves;
 
 // Blindfolded scrambles
-const blindfolded: (Move | WideMove)[] = blindfoldedScramble();
-export const blindfoldedNotation: string = formatScramble(blindfolded);
+const blindfolded = blindfoldedScramble();
+export const blindfoldedNotation: string = formatScramble(blindfolded.moves);
+export const topCentre: Face = blindfolded.faces.U[4];
+export const frontCentre: Face = blindfolded.faces.F[4];
+export const blindfoldedTop: FaceStickers = blindfolded.faces.U;
+export const blindfoldedMoves: (Move | WideMove)[] = blindfolded.moves;
 
 // What you get
-export const quick: Move[] = scramble({ effort: Efforts.fast });
+export const quick: Move[] = scramble({ effort: Efforts.fast }).moves;
 
 // Reproducible scrambles
 function seeded(seed: number): () => number {
@@ -26,4 +32,4 @@ function seeded(seed: number): () => number {
   };
 }
 
-export const repeatable: string = formatScramble(scramble({ random: seeded(42) }));
+export const repeatable: string = formatScramble(scramble({ random: seeded(42) }).moves);

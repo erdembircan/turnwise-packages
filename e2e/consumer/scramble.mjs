@@ -28,6 +28,7 @@ const prepareStarted = performance.now();
 prepare();
 const prepareMs = performance.now() - prepareStarted;
 
+const FACES = ['U', 'R', 'F', 'D', 'L', 'B'];
 const moveValues = new Set(Object.values(solver.Moves));
 const wideValues = new Set(['Rw', 'Rw2', 'Rw_PRIME', 'Fw', 'Fw_PRIME', 'Uw', 'Uw2', 'Uw_PRIME']);
 const axisOf = (move) => ({ U: 'UD', D: 'UD', R: 'RL', L: 'RL', F: 'FB', B: 'FB' })[move[0]];
@@ -45,22 +46,36 @@ function checkFaceTurns(moves) {
   assert.ok(!solver.isSolved(solver.cubeFromMoves(moves)), 'a scramble never ends solved');
 }
 
-// Default randomness: valid, never solved, different each call.
+function checkStickerCounts(faces) {
+  assert.deepEqual(Object.keys(faces).sort(), [...FACES].sort());
+  const stickers = FACES.flatMap((face) => faces[face]);
+  for (const face of FACES) {
+    assert.equal(stickers.filter((sticker) => sticker === face).length, 9, 'nine of each face');
+  }
+}
+
+// Default randomness: valid, never solved, different each call, and faces is the cube reached.
 const scrambleStarted = performance.now();
 const first = scramble();
 const scrambleMs = performance.now() - scrambleStarted;
 const second = scramble();
-for (const moves of [first, second]) checkFaceTurns(moves);
+for (const { moves, faces } of [first, second]) {
+  checkFaceTurns(moves);
+  checkStickerCounts(faces);
+  assert.deepEqual(solver.facesFromCube(solver.cubeFromMoves(moves)), faces, 'faces is the cube reached');
+  assert.ok(FACES.every((face) => faces[face][4] === face), 'centres stay put');
+}
 assert.notDeepEqual(first, second, 'the default randomness gives a different scramble every call');
 
 // Blindfolded: face turns, then at most two wide moves, off the axis of the last face turn.
 const blindfoldedStarted = performance.now();
 const blindfolded = [blindfoldedScramble(), blindfoldedScramble()];
 const blindfoldedMs = (performance.now() - blindfoldedStarted) / 2;
-for (const moves of blindfolded) {
+for (const { moves, faces } of blindfolded) {
   const faceTurns = moves.filter((move) => moveValues.has(move));
   const wideMoves = moves.slice(faceTurns.length);
   checkFaceTurns(faceTurns);
+  checkStickerCounts(faces);
   assert.ok(wideMoves.length <= 2, 'at most two wide moves');
   assert.ok(
     wideMoves.every((move) => wideValues.has(move)),
@@ -68,6 +83,8 @@ for (const moves of blindfolded) {
   );
   if (wideMoves.length > 0) {
     assert.notEqual(axisOf(faceTurns.at(-1)), axisOf(wideMoves[0]), 'no R Rw');
+  } else {
+    assert.deepEqual(solver.facesFromCube(solver.cubeFromMoves(faceTurns)), faces);
   }
 }
 assert.notDeepEqual(blindfolded[0], blindfolded[1]);
@@ -83,20 +100,20 @@ function seeded(seed) {
     return ((mixed ^ (mixed >>> 14)) >>> 0) / 4294967296;
   };
 }
+const fortyTwo = scramble({ random: seeded(42) });
+assert.equal(formatScramble(fortyTwo.moves), "F2 U F2 U' F2 R2 D L2 B R D2 L U2 L2 B2 D' F' U L2 U");
+assert.deepEqual(fortyTwo.faces.U, ['F', 'R', 'U', 'B', 'U', 'B', 'B', 'D', 'U']);
+const one = blindfoldedScramble({ random: seeded(1) });
 assert.equal(
-  formatScramble(scramble({ random: seeded(42) })),
-  "F2 U F2 U' F2 R2 D L2 B R D2 L U2 L2 B2 D' F' U L2 U",
-);
-assert.equal(
-  formatScramble(blindfoldedScramble({ random: seeded(1) })),
+  formatScramble(one.moves),
   "L2 F2 D F2 L2 D L2 B2 D L2 D R' D' B L2 U L R' D2 B F' Rw Uw'",
 );
+assert.deepEqual([one.faces.U[4], one.faces.F[4]], ['F', 'L'], 'Rw Uw\' ends green on top, orange in front');
 
 // formatScramble writes face turns exactly as the solver does.
-assert.equal(formatScramble(first), solver.formatAlgorithm(first));
+assert.equal(formatScramble(first.moves), solver.formatAlgorithm(first.moves));
 
-const fast = scramble({ effort: Efforts.fast });
-checkFaceTurns(fast);
+checkFaceTurns(scramble({ effort: Efforts.fast }).moves);
 
 // The documented errors, with their documented messages.
 assert.throws(
@@ -121,5 +138,5 @@ assert.throws(
 console.log(
   `scramble e2e passed: import ${importMs.toFixed(1)} ms, prepare ${prepareMs.toFixed(0)} ms, ` +
     `scramble ${scrambleMs.toFixed(0)} ms, blindfolded ${blindfoldedMs.toFixed(0)} ms, ` +
-    formatScramble(blindfolded[0]),
+    `${formatScramble(blindfolded[0].moves)} (top ${blindfolded[0].faces.U[4]}, front ${blindfolded[0].faces.F[4]})`,
 );

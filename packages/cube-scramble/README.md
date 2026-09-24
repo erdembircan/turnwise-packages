@@ -26,16 +26,20 @@ pnpm add @turnwise/cube-scramble
 ```ts
 import { formatScramble, scramble } from '@turnwise/cube-scramble';
 
-const moves = scramble();
-// ['R2', 'U2', 'L2', …], a different scramble every call
+const { moves, faces } = scramble();
 
 formatScramble(moves);
 // for example "R2 U2 L2 D L2 U F2 D L' U2 L2 D2 U R2 D L F L U'"
+
+faces.U;
+// the nine stickers on top afterwards, for example ['F', 'R', 'U', 'B', 'U', 'B', 'B', 'D', 'U']
 ```
 
-Apply it to a solved cube held white on top and green in front, as WCA Regulation 4d1 describes. In the package's terms that is the U face up and the F face towards you: the moves name faces, not colours.
+Apply the moves to a solved cube held white on top and green in front, as WCA Regulation 4d1 describes. In the package's terms that is the U face up and the F face towards you: the moves name faces, not colours.
 
-A scramble is an array of `Move` values, the plain strings `'R2'`, `'U_PRIME'` and so on, so it survives JSON, `postMessage` and a database unchanged. `formatScramble` turns it into the traditional notation people read and other cube programs accept.
+`moves` is an array of `Move` values, the plain strings `'R2'`, `'U_PRIME'` and so on, so it survives JSON, `postMessage` and a database unchanged. `formatScramble` turns it into the traditional notation people read and other cube programs accept.
+
+`faces` is the cube the moves leave: all 54 stickers, face by face, each named by the face it belonged to on the solved cube. On a standard cube `'U'` is white and `'F'` is green. Compare it with a scan to check that a scramble was applied correctly.
 
 ## Blindfolded scrambles
 
@@ -44,21 +48,29 @@ Blindfolded events have no inspection, so nobody gets to turn the cube to a favo
 ```ts
 import { blindfoldedScramble, formatScramble } from '@turnwise/cube-scramble';
 
-const moves = blindfoldedScramble();
-// ['L2', 'F2', 'D', …, 'Rw', 'Uw_PRIME'], a different scramble every call
+const { moves, faces } = blindfoldedScramble();
 
 formatScramble(moves);
 // for example "L2 F2 D F2 L2 D L2 B2 D L2 D R' D' B L2 U L R' D2 B F' Rw Uw'"
+
+faces.U[4]; // 'F': the cube ends with the green centre on top
+faces.F[4]; // 'L': and the orange centre in front
 ```
 
-Start from white on top and green in front, as for any scramble. A wide move turns a face together with the middle layer next to it, so `Rw` turns the right two layers as one block. For Multi-Blind, call it once for each cube.
+Do the whole scramble in one go on the same cube, held white on top and green in front, including the wide moves at the end. A wide move turns a face together with the middle layer next to it:
+
+- `Rw` turns the right face and the middle layer as one block, the way `R` turns: the front of that block goes up. The left layer stays still.
+- `Fw` turns the front face and the middle layer behind it, the way `F` turns: the top of that block goes to the right. The back layer stays still.
+- `Uw` turns the top face and the middle layer below it, the way `U` turns: the front of that block goes to the left. The bottom layer stays still.
+
+`2` turns twice, and `'` turns the other way. Afterwards the centres show the new orientation, as `faces` does. One scramble in 24 has no wide moves and leaves the cube white on top and green in front. For Multi-Blind, call it once for each cube.
 
 ## What you get
 
 | Effort | `scramble` | `blindfoldedScramble`, wide moves included |
 | --- | --- | --- |
 | `Efforts.full`, the default | usually 18 to 22 moves; 16 and 17 are rare; never more than 22 in our measurements | 19 to 25 moves in our measurements |
-| `Efforts.fast` | 18 to 24 moves, in a fraction of the time | 19 to 27 moves |
+| `Efforts.fast` | 18 to 24 moves, in a fraction of the time | 18 to 27 moves in our measurements |
 
 A scramble is never shorter than two moves, and never lands on a position that is solved or one move from solved.
 
@@ -89,7 +101,7 @@ function seeded(seed: number): () => number {
   };
 }
 
-formatScramble(scramble({ random: seeded(42) }));
+formatScramble(scramble({ random: seeded(42) }).moves);
 // "F2 U F2 U' F2 R2 D L2 B R D2 L U2 L2 B2 D' F' U L2 U", every time, on every machine
 ```
 
@@ -100,10 +112,10 @@ Use this for tests, replays and shared practice sets, not for fairness. A genera
 | | Laptop | iPhone |
 | --- | --- | --- |
 | `prepare()`, or the first scramble without it | about 0.3 s | about 0.5 s |
-| `scramble()` | about 0.1 s | about 0.17 s |
+| `scramble()` | about 0.1 s | about 0.1 s |
 | `scramble({ effort: Efforts.fast })` | a few milliseconds | under 10 ms |
 
-`blindfoldedScramble()` usually takes as long as `scramble()`. About one in three takes two to six times as long, while it finds a last face turn that does not share an axis with the first wide move.
+`blindfoldedScramble()` usually takes as long as `scramble()`. About one in three takes up to about twice as long, while it finds a last face turn that does not share an axis with the first wide move.
 
 Both are synchronous and keep their thread busy. In a browser, run them in a worker, and call `prepare()` there first so the first scramble does not pay for building its lookup tables. The [documentation](docs/documentation.md#performance-and-threading) has a complete worker.
 
@@ -122,8 +134,9 @@ It ships inside the package, at `node_modules/@turnwise/cube-scramble/docs/docum
 
 | Task | Exports |
 | --- | --- |
-| Scramble | `scramble`, `blindfoldedScramble`, `ScrambleOptions` |
+| Scramble | `scramble`, `blindfoldedScramble`, `ScrambleOptions`, `Scramble`, `BlindfoldedScramble` |
 | Moves | `formatScramble`, `Move`, `WideMove` |
+| The cube | `FaceGrid`, `FaceStickers`, `Face` |
 | Setup | `prepare`, `Efforts`, `Effort` |
 
 The package is ESM only. Node 22.12 and later can also load it with `require`.
