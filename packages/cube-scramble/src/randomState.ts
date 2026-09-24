@@ -5,7 +5,7 @@ import type { CubieState } from '@turnwise/internal';
  * A whole number from 0 to `count - 1`, each equally likely, drawn with `random`. Every draw goes
  * through here, so this is where a random function that breaks its contract is caught.
  */
-function pick(random: () => number, count: number): number {
+export function pick(random: () => number, count: number): number {
   const value = random();
   if (typeof value !== 'number' || !(value >= 0 && value < 1)) {
     throw new RangeError(
