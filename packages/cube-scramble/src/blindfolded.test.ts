@@ -36,12 +36,17 @@ describe('blindfoldedScramble', () => {
     }
   });
 
-  it('returns the cube as held after the wide moves as its faces', () => {
+  it('returns the cube as held after the wide moves, and the same cube upright', () => {
     for (let seed = 1; seed <= 20; seed++) {
-      const { faces } = blindfoldedScramble({ random: seededRandom(seed), effort: Efforts.fast });
+      const { faces, upright } = blindfoldedScramble({
+        random: seededRandom(seed),
+        effort: Efforts.fast,
+      });
       const random = seededRandom(seed);
       const drawn = drawScrambleState(random);
-      expect(faces, `seed ${String(seed)}`).toEqual(turnedFaces(drawn, drawOrientation(random)));
+      expect({ faces, upright }, `seed ${String(seed)}`).toEqual(
+        turnedFaces(drawn, drawOrientation(random)),
+      );
     }
   });
 

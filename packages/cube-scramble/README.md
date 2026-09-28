@@ -48,13 +48,16 @@ Blindfolded events have no inspection, so nobody gets to turn the cube to a favo
 ```ts
 import { blindfoldedScramble, formatScramble } from '@turnwise/cube-scramble';
 
-const { moves, faces } = blindfoldedScramble();
+const { moves, faces, upright } = blindfoldedScramble();
 
 formatScramble(moves);
 // for example "L2 F2 D F2 L2 D L2 B2 D L2 D R' D' B L2 U L R' D2 B F' Rw Uw'"
 
 faces.U[4]; // 'F': the cube ends with the green centre on top
 faces.F[4]; // 'L': and the orange centre in front
+
+upright.U;
+// the same cube turned white on top and green in front: ['U', 'R', 'R', 'R', 'U', 'F', 'L', 'D', 'B']
 ```
 
 Do the whole scramble in one go on the same cube, held white on top and green in front, including the wide moves at the end. A wide move turns a face together with the middle layer next to it:
@@ -65,12 +68,14 @@ Do the whole scramble in one go on the same cube, held white on top and green in
 
 `2` turns twice, and `'` turns the other way. Afterwards the centres show the new orientation, as `faces` does. One scramble in 24 has no wide moves and leaves the cube white on top and green in front. For Multi-Blind, call it once for each cube.
 
+To check a blindfolded scramble with a scanner, compare the scan with `upright`, not `faces`. A scanner cannot see how the cube is held, so it files every scan white on top and green in front, whichever way the wide moves turned the cube. `upright` is the scrambled cube filed the same way.
+
 ## What you get
 
 | Effort | `scramble` | `blindfoldedScramble`, wide moves included |
 | --- | --- | --- |
 | `Efforts.full`, the default | usually 18 to 22 moves; 16 and 17 are rare; never more than 22 in our measurements | 19 to 25 moves in our measurements |
-| `Efforts.fast` | 18 to 24 moves, in a fraction of the time | 18 to 27 moves in our measurements |
+| `Efforts.fast` | usually 18 to 24 moves, in a fraction of the time; as few as 15 in our measurements | 18 to 27 moves in our measurements |
 
 A scramble is never shorter than two moves, and never lands on a position that is solved or one move from solved.
 

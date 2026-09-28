@@ -1,5 +1,5 @@
 import { cubeFromFaces, cubeFromMoves, faceOf, inverse } from '@turnwise/cube-solver';
-import type { Effort, Face, FaceStickers, Move } from '@turnwise/cube-solver';
+import type { Effort, Face, FaceGrid, FaceStickers, Move } from '@turnwise/cube-solver';
 import { gridOf } from '@turnwise/internal';
 import type { WideMove } from './notation';
 import { drawOrientation } from './orientation';
@@ -71,6 +71,11 @@ export interface BlindfoldedScramble {
    * when solved. The wide moves turn the whole cube, so the centres show its orientation.
    */
   readonly faces: Readonly<Record<Face, FaceStickers>>;
+  /**
+   * The same cube, turned so white is on top and green in front, as a scanner files it. Compare a
+   * scan with this.
+   */
+  readonly upright: FaceGrid;
 }
 
 /**
@@ -82,12 +87,13 @@ export function blindfoldedScramble(options: ScrambleOptions = {}): BlindfoldedS
   const random = options.random ?? secureRandom;
   const state = drawScrambleState(random);
   const orientation = drawOrientation(random);
-  const faces = turnedFaces(state, orientation);
+  const { faces, upright } = turnedFaces(state, orientation);
   const moves = scrambleOf(cubeFromFaces(gridOf(state)), options.effort);
   const first = orientation[0];
-  if (first === undefined) return { moves, faces };
+  if (first === undefined) return { moves, faces, upright };
   return {
     moves: [...endingOffAxis(moves, WIDE_AXIS[first], options.effort), ...orientation],
     faces,
+    upright,
   };
 }
