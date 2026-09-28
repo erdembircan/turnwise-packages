@@ -1,5 +1,5 @@
 import { compose, effectOf, gridOf } from '@turnwise/internal';
-import type { CubieState, Face, FaceStickers, Move } from '@turnwise/internal';
+import type { CubieState, Face, FaceGrid, FaceStickers, Move } from '@turnwise/internal';
 import type { WideMove } from './notation';
 
 /**
@@ -106,11 +106,19 @@ function turnedGrid(grid: TurnedFaceGrid, rotation: Rotation): TurnedFaceGrid {
   };
 }
 
+/** A cube after a blindfolded scramble, both as it is held and turned back upright. */
+export interface TurnedCube {
+  /** The cube as it is held after the wide moves. */
+  readonly faces: TurnedFaceGrid;
+  /** The same cube, turned so the U centre is on top and the F centre in front. */
+  readonly upright: FaceGrid;
+}
+
 /**
- * The cube as it is held after reaching `state` from solved, held white on top and green in
- * front, and then turning `orientation`'s wide moves.
+ * The cube after reaching `state` from solved, held white on top and green in front, and then
+ * turning `orientation`'s wide moves: as it is then held, and turned back upright.
  */
-export function turnedFaces(state: CubieState, orientation: readonly WideMove[]): TurnedFaceGrid {
+export function turnedFaces(state: CubieState, orientation: readonly WideMove[]): TurnedCube {
   let layersTurned = state;
   // Which face's centre is at each position, after the whole-cube turns so far.
   let holding: Readonly<Record<Face, Face>> = { U: 'U', R: 'R', F: 'F', D: 'D', L: 'L', B: 'B' };
@@ -125,7 +133,8 @@ export function turnedFaces(state: CubieState, orientation: readonly WideMove[])
       rotations.push(rotation);
     }
   }
-  let grid: TurnedFaceGrid = gridOf(layersTurned);
-  for (const rotation of rotations) grid = turnedGrid(grid, rotation);
-  return grid;
+  const upright = gridOf(layersTurned);
+  let faces: TurnedFaceGrid = upright;
+  for (const rotation of rotations) faces = turnedGrid(faces, rotation);
+  return { faces, upright };
 }

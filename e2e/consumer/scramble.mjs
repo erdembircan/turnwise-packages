@@ -71,11 +71,14 @@ assert.notDeepEqual(first, second, 'the default randomness gives a different scr
 const blindfoldedStarted = performance.now();
 const blindfolded = [blindfoldedScramble(), blindfoldedScramble()];
 const blindfoldedMs = (performance.now() - blindfoldedStarted) / 2;
-for (const { moves, faces } of blindfolded) {
+for (const { moves, faces, upright } of blindfolded) {
   const faceTurns = moves.filter((move) => moveValues.has(move));
   const wideMoves = moves.slice(faceTurns.length);
   checkFaceTurns(faceTurns);
   checkStickerCounts(faces);
+  checkStickerCounts(upright);
+  assert.ok(FACES.every((face) => upright[face][4] === face), 'upright has every centre home');
+  assert.doesNotThrow(() => solver.cubeFromFaces(upright), 'upright is a legal cube');
   assert.ok(wideMoves.length <= 2, 'at most two wide moves');
   assert.ok(
     wideMoves.every((move) => wideValues.has(move)),
@@ -85,6 +88,7 @@ for (const { moves, faces } of blindfolded) {
     assert.notEqual(axisOf(faceTurns.at(-1)), axisOf(wideMoves[0]), 'no R Rw');
   } else {
     assert.deepEqual(solver.facesFromCube(solver.cubeFromMoves(faceTurns)), faces);
+    assert.deepEqual(upright, faces, 'with no wide moves, upright is faces');
   }
 }
 assert.notDeepEqual(blindfolded[0], blindfolded[1]);
@@ -109,6 +113,8 @@ assert.equal(
   "L2 F2 D F2 L2 D L2 B2 D L2 D R' D' B L2 U L R' D2 B F' Rw Uw'",
 );
 assert.deepEqual([one.faces.U[4], one.faces.F[4]], ['F', 'L'], 'Rw Uw\' ends green on top, orange in front');
+assert.deepEqual(one.upright.U, ['U', 'R', 'R', 'R', 'U', 'F', 'L', 'D', 'B']);
+assert.deepEqual(one.upright.F, ['D', 'B', 'L', 'B', 'F', 'B', 'F', 'U', 'F']);
 
 // formatScramble writes face turns exactly as the solver does.
 assert.equal(formatScramble(first.moves), solver.formatAlgorithm(first.moves));

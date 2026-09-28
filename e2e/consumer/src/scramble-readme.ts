@@ -15,6 +15,7 @@ export const blindfoldedNotation: string = formatScramble(blindfolded.moves);
 export const topCentre: Face = blindfolded.faces.U[4];
 export const frontCentre: Face = blindfolded.faces.F[4];
 export const blindfoldedTop: FaceStickers = blindfolded.faces.U;
+export const scanReady: FaceGrid = blindfolded.upright;
 export const blindfoldedMoves: (Move | WideMove)[] = blindfolded.moves;
 
 // What you get
