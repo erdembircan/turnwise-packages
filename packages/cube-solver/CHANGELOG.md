@@ -7,6 +7,12 @@ and this package adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.1] - 2026-09-30
+
+### Changed
+
+- Internal restructuring, with no change to the API, the types or the behaviour: the same cube and effort give the same solution as 1.0.0.
+
 ## [1.0.0] - 2026-09-21
 
 ### Added
