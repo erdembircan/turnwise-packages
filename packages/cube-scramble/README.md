@@ -32,7 +32,7 @@ formatScramble(moves);
 // for example "R2 U2 L2 D L2 U F2 D L' U2 L2 D2 U R2 D L F L U'"
 
 faces.U;
-// the nine stickers on top afterwards, for example ['F', 'R', 'U', 'B', 'U', 'B', 'B', 'D', 'U']
+// the nine stickers on top afterwards; for the example above, ['D', 'U', 'U', 'B', 'U', 'B', 'U', 'D', 'L']
 ```
 
 Apply the moves to a solved cube held white on top and green in front, as WCA Regulation 4d1 describes. In the package's terms that is the U face up and the F face towards you: the moves name faces, not colours.
@@ -120,7 +120,7 @@ Use this for tests, replays and shared practice sets, not for fairness. A genera
 | `scramble()` | about 0.1 s | about 0.1 s |
 | `scramble({ effort: Efforts.fast })` | a few milliseconds | under 10 ms |
 
-`blindfoldedScramble()` usually takes as long as `scramble()`. About one in three takes up to about twice as long, while it finds a last face turn that does not share an axis with the first wide move.
+`blindfoldedScramble()` usually takes as long as `scramble()`. About one in three takes longer, while it finds a last face turn that does not share an axis with the first wide move: one in ten takes about twice as long, and the slowest we measured took about five times as long.
 
 Both are synchronous and keep their thread busy. In a browser, run them in a worker, and call `prepare()` there first so the first scramble does not pay for building its lookup tables. The [documentation](docs/documentation.md#performance-and-threading) has a complete worker.
 

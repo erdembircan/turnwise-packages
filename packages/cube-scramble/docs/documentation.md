@@ -82,7 +82,7 @@ formatScramble(moves);
 // for example "R2 U2 L2 D L2 U F2 D L' U2 L2 D2 U R2 D L F L U'"
 
 faces.U;
-// the nine stickers on top afterwards, for example ['F', 'R', 'U', 'B', 'U', 'B', 'B', 'D', 'U']
+// the nine stickers on top afterwards; for the example above, ['D', 'U', 'U', 'B', 'U', 'B', 'U', 'D', 'L']
 
 scramble({ effort: Efforts.fast }); // quicker, a few moves longer
 ```
@@ -311,7 +311,7 @@ const faceTurns = moves.filter((move): move is Move => !move.includes('w'));
 
 ## The cube
 
-`FaceGrid`, `FaceStickers` and `Face` are `@turnwise/cube-solver`'s own types, passed through unchanged, so a cube from this package can go straight into the solver and back.
+`FaceGrid`, `FaceStickers` and `Face` are `@turnwise/cube-solver`'s own types, passed through unchanged, so a `FaceGrid` from this package (a scramble's `faces`, or a blindfolded scramble's `upright`) goes straight into the solver and back. A blindfolded scramble's `faces` does not: its centres can be anywhere.
 
 ### `FaceGrid`
 
@@ -448,7 +448,7 @@ Thrown by `formatScramble` when a move is neither a `Move` nor a `WideMove`. The
 | [`prepare()`](#prepare), or the first scramble without it | about 0.3 s | about 0.5 s |
 | `scramble()` | about 0.1 s | about 0.1 s |
 | `scramble({ effort: Efforts.fast })` | a few milliseconds, at most about 50 ms | under 10 ms, at most about 80 ms |
-| `blindfoldedScramble()` | about 0.1 s; one in ten over 0.19 s; at most about 0.34 s | about 0.1 s; one in ten over 0.21 s; at most about 0.32 s |
+| `blindfoldedScramble()` | about 0.1 s; one in ten over 0.19 s; at most about 0.36 s | about 0.1 s; one in ten over 0.21 s; at most about 0.53 s |
 | `blindfoldedScramble({ effort: Efforts.fast })` | a few milliseconds, at most about 45 ms | a few milliseconds, at most about 70 ms |
 
 The times were measured inside a worker on a MacBook in Chromium and an iPhone in Safari. They scale with the machine, but the scrambles do not: the same position, effort and randomness give the same moves anywhere.
