@@ -63,6 +63,24 @@ The moves come from the solver, which finds a short way from the scrambled posit
 
 Every scramble has at least two moves. The same position and effort always give the same moves.
 
+### Getting back to solved
+
+A scramble is the solver's way from the scrambled position back to solved, reversed. So the way back is the scramble undone: every move inverted, in reverse order. That is exactly the solver's own solution, as long as the scramble, and there is no need to solve the cube again.
+
+This package has no function for it. Use `inverse` from `@turnwise/cube-solver`, which is installed with this package:
+
+```ts
+import { inverse } from '@turnwise/cube-solver';
+import { formatScramble, scramble } from '@turnwise/cube-scramble';
+
+const { moves } = scramble();
+const solution = inverse(moves);
+
+formatScramble(solution); // the scramble undone: the same number of moves, back to solved
+```
+
+`inverse` takes face turns only, so this works for [`scramble`](#scramble). A [`blindfoldedScramble`](#blindfoldedscramble) ends in wide moves, which it does not take.
+
 ## Scrambling
 
 ### `scramble`
