@@ -21,6 +21,10 @@ Each scramble leads to a random position, and every position that needs at least
 pnpm add @turnwise/cube-scramble
 ```
 
+## See it working
+
+Every scramble in [Turnwise](https://erdembircan.github.io/turnwise/) comes from this package. Open the menu and choose Scramble for a fresh random scramble, or watch the cube on the home page scramble itself.
+
 ## Get a scramble
 
 ```ts
@@ -148,4 +152,4 @@ The package is ESM only. Node 22.12 and later can also load it with `require`.
 
 ## License
 
-[Apache-2.0](LICENSE) © Erdem Bircan
+[Apache-2.0](https://github.com/erdembircan/turnwise-packages/blob/main/LICENSE) © Erdem Bircan
